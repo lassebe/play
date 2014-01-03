@@ -4,6 +4,7 @@
 
 int main(){
   printf("Hello world!\n");
+  //There really must be a better way to write test-code...
   Tree * t = (Tree *) malloc(sizeof(Tree));
   t->data = 5;
   Tree * t2 = (Tree *) malloc(sizeof(Tree));
