@@ -3,7 +3,6 @@
 #include "tree.h"
 
 int main(){
-  printf("Hello world!\n");
   //There really must be a better way to write test-code...
   Tree * t = (Tree *) malloc(sizeof(Tree));
   t->data = 5;
@@ -13,12 +12,16 @@ int main(){
   t3->data = 6;
   t->left = t2;
   t->right = t3;
-
-  printf("%d \n",numberOfLeaves(t));
-
-  free(t);
-  free(t2);
-  free(t3);
+  writeTree(t);
+  printf("Depth is %d\n",depth(t));
+  insert(t,7);
+  writeTree(t);
+  printf("Depth is %d\n",depth(t));
+  tearDown(&t);
+  if(t==NULL){
+    printf("HEJ");
+  }
+  writeTree(t);
 
   return 0;
 
