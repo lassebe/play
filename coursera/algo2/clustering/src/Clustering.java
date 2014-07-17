@@ -14,7 +14,9 @@ public class Clustering {
 		UnionFind uf;
 		int nodes = io.getInt();
 		int bits = io.getInt();
-		HashMap<Integer[],ArrayList<Integer>> hm = new HashMap<Integer[],ArrayList<Integer>>();
+		HashMap<Integer[],ArrayList<Integer>> viableEdges = new HashMap<Integer[],ArrayList<Integer>>();
+		int node[] = new int[bits];
+		//viableEdges[node] = Generate();
 		uf = new UnionFind(nodes);
 		
 		long s=0;
@@ -28,18 +30,35 @@ public class Clustering {
 			//}
 			iter++;
 		}
-		boolean found=false;
-		/*
-		while(!found){
-			if(uf.find(es.get(iter).u) != uf.find(es.get(iter).v)){
-				s = es.get(iter).c;
-				found = true;
-			}
-			iter++;
-		}*/
 		io.println(s);
 		io.close();
 	}
 
+	
+	public static char[] Xor(char[] a, char[] b){
+        char[] c = new char[a.length];
+        for (int i = 0; i < a.length; i++)
+            if (a[i] == b[i])
+                c[i] = '0';
+            else
+                c[i] = '1';
+ 
+        return c;
+    }
+ 
+    public static void Generate(char[] original, char[] current, int position, int k){
+        if (position == original.length){
+            System.out.println((Xor(original, current)));
+            return;
+        }
+ 
+        if (k > 0){
+            current[position] = '1';
+            Generate(original, current, position + 1, k - 1);
+        }
+ 
+        current[position] = '0';
+        Generate(original, current, position + 1, k);
+    }
 	
 }
