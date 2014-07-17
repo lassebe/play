@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -8,13 +7,13 @@ public class Kruskal {
 	static Kattio io = new Kattio(System.in, System.out);
 	static int edges;
 	static UnionFind uf;
-	
 
 	/**
 	 * @param args
 	 */
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {	
+		
 		@SuppressWarnings("rawtypes")
 		class Edge implements Comparable{
 			public int u;
@@ -37,7 +36,7 @@ public class Kruskal {
 				return 0;
 			}
 		};
-		
+
 		edges = io.getInt();
 		uf = new UnionFind(edges);
 		edges = ((edges-1)*edges)/2;
