@@ -1,6 +1,5 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+//import java.util.ArrayList;
+//import java.util.HashMap;
 
 public class Clustering {
 
@@ -8,19 +7,18 @@ public class Clustering {
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {	
 		Kattio io = new Kattio(System.in, System.out);
 		UnionFind uf;
 		int nodes = io.getInt();
-		int bits = io.getInt();
-		HashMap<Integer[],ArrayList<Integer>> viableEdges = new HashMap<Integer[],ArrayList<Integer>>();
-		int node[] = new int[bits];
+		//int bits = io.getInt();
+		//HashMap<Integer[],ArrayList<Integer>> viableEdges = new HashMap<Integer[],ArrayList<Integer>>();
+		//int node[] = new int[bits];
 		//viableEdges[node] = Generate();
 		uf = new UnionFind(nodes);
 		
 		long s=0;
-		int iter=0;
+		//int iter=0;
 		while(uf.getNumComponents() > 4){
 			//if(uf.find(es.get(iter).u) != uf.find(es.get(iter).v)){
 				//io.print("union ");
@@ -28,7 +26,7 @@ public class Clustering {
 				//uf.unify(es.get(iter).u,es.get(iter).v);
 							
 			//}
-			iter++;
+			//iter++;
 		}
 		io.println(s);
 		io.close();
