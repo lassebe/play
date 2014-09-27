@@ -25,14 +25,21 @@ public class UnionFind {
 	}
 	/*
 	 * Returns the "name" of the component that x belongs to.
+	 * Now with actual path compression.
 	 * O(1)
 	 */
 	int find(int x){
 	  if(x >= 0 && x < elements.length){
-		  if(elements[x] != x){
-			  elements[x] = find(elements[x]);
-		  }
-	    return elements[x];
+		  int root = x;   
+	    while( root != elements[root]){
+	      root = elements[root];
+	    }
+	    while(x != root){
+	      int newx = elements[x];
+	      elements[x] = root;
+	      x = newx;
+	    }
+	    return root;
 	  }
 	  //Something went wrong
 	  return -1;
