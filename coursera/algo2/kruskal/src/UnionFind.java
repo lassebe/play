@@ -1,7 +1,7 @@
 
 public class UnionFind {
 	private int elements[];
-	private int componentSize[];
+	private int rank[];
 	int components;
 	
 	/**
@@ -12,10 +12,10 @@ public class UnionFind {
 	UnionFind(int n){
 		components = n;
 		elements = new int [n];
-		componentSize = new int [n];
+		rank = new int[n];
 		for(int i=0; i < n; i++){
 			elements[i]=i;
-			componentSize[i] = 1;
+			rank[i] = 0;
 		}
 	}
 	
@@ -25,11 +25,21 @@ public class UnionFind {
 	}
 	/*
 	 * Returns the "name" of the component that x belongs to.
+	 * Now with actual path compression.
 	 * O(1)
 	 */
 	int find(int x){
 	  if(x >= 0 && x < elements.length){
-	    return elements[x];
+		  int root = x;   
+	    while( root != elements[root]){
+	      root = elements[root];
+	    }
+	    while(x != root){
+	      int newx = elements[x];
+	      elements[x] = root;
+	      x = newx;
+	    }
+	    return root;
 	  }
 	  //Something went wrong
 	  return -1;
@@ -55,29 +65,19 @@ public class UnionFind {
 	        //Throw exception?
 	        return;
 	    }
+	    int xRoot=find(x);
+	    int yRoot=find(y);
+	    if(xRoot == yRoot){
+	    	return;
+	    }
 	    components--;
-	    if(componentSize[x] >= componentSize[y]){
-	    	int smallGroup = find(y);
-	    	int largeGroup = find(x);
-	        for(int i=0; i < elements.length; i++){
-	            if(elements[i] == smallGroup){
-	                elements[i] = find(x);
-	                componentSize[i] += 1;
-	            }else if(elements[i] == largeGroup){
-	                componentSize[i] += 1;
-	            }
-	        }
+	    if(rank[xRoot] < rank[yRoot]){
+	    	elements[xRoot] = yRoot;
+	    }else if(rank[xRoot] > rank[yRoot]){
+	    	elements[yRoot] = xRoot;
 	    }else{
-	    	int smallGroup = find(x);
-	    	int largeGroup = find(y);
-	        for(int i=0; i < elements.length; i++){
-	            if(elements[i] == smallGroup){
-	                elements[i] = largeGroup;
-	                componentSize[i] += 1;
-	            }else if(elements[i] == largeGroup){
-	                componentSize[i] += 1;
-	            }
-	        }
+	    	elements[yRoot] = xRoot;
+	    	rank[xRoot] += 1;
 	    }
 	}
 }
