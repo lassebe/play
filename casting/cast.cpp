@@ -9,6 +9,7 @@ using namespace std;
 
 void readInput();
 void greedyStuff();
+void stupidStuff();
 void printAssignment();
 void printRoles();
 void printConflict();
@@ -45,7 +46,7 @@ int main(){
 
   readInput();
 
-  greedyStuff();
+  stupidStuff();
   //Simulated annealing
   
   //For testing
@@ -54,6 +55,31 @@ int main(){
   printSolution();
 }
 
+
+void stupidStuff(){
+
+  //Which actors have been assigned
+  bool assigned[n];
+  for(int i=0;i<n;++i){
+    assigned[i]=false;
+  }
+  
+  //Assign the divas
+  int i_temp=0;
+  while(!assign_divas(i_temp)){
+    ++i_temp;
+  }
+  assigned[assignment[0][0]] = true;
+  assigned[assignment[1][0]] = true;
+  int superactor = k;
+  for(int role=0; role < n; ++role){
+    if(!assigned[role]){
+      assignment[superactor].push_back(role);
+      assigned[role] = true;
+      ++superactor;
+    }
+  }
+}
 
 //Assign the divas, then give each actor as many actors as possible
 void greedyStuff(){
