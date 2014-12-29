@@ -11,6 +11,7 @@ void readInput();
 
 void stupidStuff();
 void greedyStuff();
+void trySwitch();
 void localSearch();
 
 void printAssignment();
@@ -21,7 +22,6 @@ void verifySolution();
 
 bool assign_divas(int);
 int countUsedActors(vector<vector<int>> &);
-bool contains(vector<int> & , int);
 bool checkForConflict(int possibleRole, int actor);
 bool checkForDivaConflict(int possibleRole, int actor);
 
@@ -63,12 +63,65 @@ int main(){
 
   //For testing
   //verifySolution();
+
+  trySwitch();
   printSolution();
 }
 
+
+void trySwitch(){
+  int prevActor = 8;
+  int newActor = -1;
+  int switchRole = assignment[prevActor].back();
+  assignment[prevActor].pop_back();
+
+  for(int i=k; i < k+n; ++i){
+    if(assignment[i].size() == 0){
+      assignment[i].push_back(switchRole);
+      assigned[switchRole] = i;
+      newActor = i;
+      break;
+    }
+  }
+  bool conflict = false;
+  
+  for(int actor = 0; actor < k; ++actor){
+    if(actor == prevActor)
+      continue;
+    for(auto role = roles[actor].begin(); role != roles[actor].end(); ++role){
+      int possibleRole = *role;
+      if(possibleRole != switchRole)
+        continue;
+
+      //cout  << "possibleRole = " << possibleRole << "\n actor = " << actor << "\n";
+      conflict = checkForConflict(possibleRole,actor);
+      
+      if(!conflict){
+        assignment[newActor].pop_back();
+
+        assignment[actor].push_back(possibleRole);
+        assigned[possibleRole] = actor;
+
+        //If the old solution was better, revert
+        /*if(usedActors < countUsedActors(assignment)){
+          assignment[assigned[possibleRole]].pop_back();
+          assignment[prevActor].push_back(possibleRole);
+          assigned[possibleRole] = prevActor;
+        }*/
+
+        //to break the loop
+        greedyStuff();
+        return;
+      }
+      conflict = false;
+    }
+  }
+}
+
+
 void greedyStuff(){
 
-  int usedActors = countUsedActors(assignment);
+  //int usedActors = countUsedActors(assignment);
   bool conflict = false;
 
 
@@ -167,15 +220,6 @@ bool assign_divas(int i){
     ++j;
   }
 
-  return false;
-}
-
-
-bool contains(vector<int> & vec, int role){
-  for(auto it=vec.begin(); it != vec.end(); ++it){
-    if(*it == role)
-      return true;
-  }
   return false;
 }
 
