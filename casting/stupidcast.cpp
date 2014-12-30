@@ -11,7 +11,7 @@ void readInput();
 
 void stupidStuff();
 void greedyStuff();
-void trySwitch();
+void trySwitch(int);
 void localSearch();
 
 void printAssignment();
@@ -63,14 +63,13 @@ int main(){
 
   //For testing
   //verifySolution();
-
-  trySwitch();
+  for(int i = 0; i < k; ++i)
+    trySwitch(i);
   printSolution();
 }
 
 
-void trySwitch(){
-  int prevActor = 8;
+void trySwitch(int prevActor){
   int newActor = -1;
   int switchRole = assignment[prevActor].back();
   assignment[prevActor].pop_back();
