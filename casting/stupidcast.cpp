@@ -1,5 +1,4 @@
 #include <iostream>
-//#include <algorithms>
 #include <vector>
 #include <assert.h>
 #include <map>
@@ -11,12 +10,13 @@ void readInput();
 
 void stupidStuff();
 void greedyStuff();
-void trySwitch(int);
-void localSearch();
 
 void printAssignment();
 void printRoles();
 void printSolution();
+
+void localSearch(int);
+
 
 void verifySolution();
 
@@ -57,65 +57,114 @@ int main(){
 
   stupidStuff();
 
-  //local search with
-  //Simulated annealing
   greedyStuff();
 
   //For testing
   //verifySolution();
-  for(int i = 0; i < k; ++i)
-    trySwitch(i);
-  printSolution();
-}
+  double temp = 100.0;
+  for(int j=0; j < 10; ++j){
+    for(int i = 2; i < k; ++i)
+      localSearch(i,temp);
 
-
-void trySwitch(int prevActor){
-  int newActor = -1;
-  int switchRole = assignment[prevActor].back();
-  assignment[prevActor].pop_back();
-
-  for(int i=k; i < k+n; ++i){
-    if(assignment[i].size() == 0){
-      assignment[i].push_back(switchRole);
-      assigned[switchRole] = i;
-      newActor = i;
-      break;
-    }
+    temp *= 1-0.03;
   }
-  bool conflict = false;
-  
-  for(int actor = 0; actor < k; ++actor){
-    if(actor == prevActor)
+/*
+  for(int i = 0; i < 1000; ++i){
+    int randomActor = (rand() % k-3) + 2;
+    if(randomActor < 2)
       continue;
-    for(auto role = roles[actor].begin(); role != roles[actor].end(); ++role){
-      int possibleRole = *role;
-      if(possibleRole != switchRole)
-        continue;
+    localSearch(randomActor);
+  }*/
 
-      //cout  << "possibleRole = " << possibleRole << "\n actor = " << actor << "\n";
-      conflict = checkForConflict(possibleRole,actor);
-      
-      if(!conflict){
-        assignment[newActor].pop_back();
+  printSolution(); 
+}
+ 
 
-        assignment[actor].push_back(possibleRole);
-        assigned[possibleRole] = actor;
 
-        //If the old solution was better, revert
-        /*if(usedActors < countUsedActors(assignment)){
-          assignment[assigned[possibleRole]].pop_back();
-          assignment[prevActor].push_back(possibleRole);
-          assigned[possibleRole] = prevActor;
-        }*/
 
-        //to break the loop
-        greedyStuff();
-        return;
+
+
+void localSearch(int actor, double temp){
+  int usedActors = countUsedActors(assignment);
+  vector<vector<int>> prevAssignment = assignment;
+  vector<int> prevAssigned = assigned;
+  bool conflict = false;
+
+
+  vector<int> actor_roles = assignment[actor];
+  while(!assignment[actor].empty()){
+    int role = assignment[actor].back();
+    assignment[actor].pop_back();
+
+    for(int superactor = k; superactor < k+n; ++superactor){
+      if(assignment[superactor].empty()){
+        assignment[superactor].push_back(role);
+        assigned[role] = superactor;
+        break;
       }
-      conflict = false;
     }
   }
+
+  while(!actor_roles.empty()){
+    int possibleRole = actor_roles.back();
+    actor_roles.pop_back();
+    for(int possibleActor = actor+1; possibleActor < k; ++ possibleActor){
+      for(auto role = roles[possibleActor].begin(); role != roles[possibleActor].end(); ++role){
+         if(*role != possibleRole){
+          continue;
+         }
+
+         int prevActor = assigned[possibleRole];
+         conflict = checkForConflict(possibleRole,possibleActor);
+
+        if(!conflict){
+          for(auto it = assignment[prevActor].begin(); it != assignment[prevActor].end(); ++it){
+           if(*it == possibleRole){
+              assignment[prevActor].erase(it);
+              break;
+            }
+          }
+          assignment[possibleActor].push_back(possibleRole);
+          assigned[possibleRole] = possibleActor;
+        }
+      }
+    }
+  }
+
+
+  for(auto role = roles[actor].begin(); role != roles[actor].end(); ++role){
+    int possibleRole = *role;
+    int prevActor = assigned[possibleRole];
+
+    if(prevActor < k)
+      continue;
+    conflict = checkForConflict(possibleRole,actor);
+    if(!conflict){
+      for(auto it = assignment[prevActor].begin(); it != assignment[prevActor].end(); ++it){
+       if(*it == possibleRole){
+          assignment[prevActor].erase(it);
+          break;
+        }
+      }
+      assignment[actor].push_back(possibleRole);
+      assigned[possibleRole] = actor;
+    }
+    conflict = false;
+  }
+
+
+  int newEnergy = countUsedActors(assignment) - usedActors;
+  if(newEnergy >= 0 || -1*(newEnergy/temp) > rand() % 100 ){
+    return;
+  }else{
+    assignment = prevAssignment;
+    assigned = prevAssigned;
+  }
+
+
+
 }
+
 
 
 void greedyStuff(){
@@ -129,7 +178,7 @@ void greedyStuff(){
       int possibleRole = *role;
       int prevActor = assigned[possibleRole];
 
-      if(prevActor == 0 || prevActor == 1)
+      if(prevActor < k)
         continue;
 
 
