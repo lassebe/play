@@ -59,39 +59,38 @@ int main(){
 
   greedyStuff();
 
-  //For testing
-  //verifySolution();
-  double temp = 100.0;
-  for(int j=0; j < 10; ++j){
-    for(int i = 2; i < k; ++i)
-      localSearch(i,temp);
-
-    temp *= 1-0.03;
-  }
-/*
   for(int i = 0; i < 1000; ++i){
     int randomActor = (rand() % k-3) + 2;
     if(randomActor < 2)
       continue;
     localSearch(randomActor);
-  }*/
+  }
 
+  //For testing
+  //verifySolution();
+  for(int j=0; j < 3; ++j){
+    for(int i = 2; i < k; ++i)
+      localSearch(i);
+
+  }
   printSolution(); 
 }
- 
 
-
-
-
-
-void localSearch(int actor, double temp){
+void localSearch(int actor){
   int usedActors = countUsedActors(assignment);
   vector<vector<int>> prevAssignment = assignment;
   vector<int> prevAssigned = assigned;
   bool conflict = false;
 
+  /*int remainingRoles = 0;
+  if(actor == 0 || actor == 1){
+    remainingRoles = 1;
+  }*/
 
   vector<int> actor_roles = assignment[actor];
+  /*if(actor == 0 || actor == 1){
+    actor_roles.erase(actor_roles.begin());
+  }*/
   while(!assignment[actor].empty()){
     int role = assignment[actor].back();
     assignment[actor].pop_back();
@@ -105,17 +104,19 @@ void localSearch(int actor, double temp){
     }
   }
 
+  int min = usedActors;
   while(!actor_roles.empty()){
+    bool first = true;
     int possibleRole = actor_roles.back();
     actor_roles.pop_back();
-    for(int possibleActor = actor+1; possibleActor < k; ++ possibleActor){
+    for(int possibleActor = actor+1; possibleActor < k; ++possibleActor){
       for(auto role = roles[possibleActor].begin(); role != roles[possibleActor].end(); ++role){
-         if(*role != possibleRole){
+        if(*role != possibleRole){
           continue;
-         }
+        }
 
-         int prevActor = assigned[possibleRole];
-         conflict = checkForConflict(possibleRole,possibleActor);
+        int prevActor = assigned[possibleRole];
+        conflict = checkForConflict(possibleRole,possibleActor);
 
         if(!conflict){
           for(auto it = assignment[prevActor].begin(); it != assignment[prevActor].end(); ++it){
@@ -126,11 +127,35 @@ void localSearch(int actor, double temp){
           }
           assignment[possibleActor].push_back(possibleRole);
           assigned[possibleRole] = possibleActor;
+
+
+          if(first){
+            min = countUsedActors(assignment);
+            first = false;
+          }
+          int used_in_new_solution = countUsedActors(assignment);
+          // If new solution worse, roll back
+          if(used_in_new_solution > min){
+            for(auto it = assignment[possibleActor].begin(); it != assignment[possibleActor].end(); ++it){
+             if(*it == possibleRole){
+                assignment[possibleActor].erase(it);
+                break;
+              }
+            }
+            assignment[prevActor].push_back(possibleRole);
+            assigned[possibleRole] = prevActor;
+          }else{
+            min = used_in_new_solution;
+          }
+          //STOP RIGHT THERE CRIMINAL SCUM
+          /*if(++test == 2){
+            possibleActor = k;
+            break;
+          }*/
         }
       }
     }
   }
-
 
   for(auto role = roles[actor].begin(); role != roles[actor].end(); ++role){
     int possibleRole = *role;
@@ -152,16 +177,16 @@ void localSearch(int actor, double temp){
     conflict = false;
   }
 
-
+/*
   int newEnergy = countUsedActors(assignment) - usedActors;
-  if(newEnergy >= 0 || -1*(newEnergy/temp) > rand() % 100 ){
+  if(newEnergy >= -5 ){
     return;
   }else{
     assignment = prevAssignment;
     assigned = prevAssigned;
   }
 
-
+*/
 
 }
 
@@ -203,9 +228,7 @@ void greedyStuff(){
       }
       conflict = false;
     }
- }
-    
-
+  }
 }
 
 bool checkForConflict(int possibleRole, int actor){
@@ -261,6 +284,7 @@ bool assign_divas(int i){
       if(!conflict){
         assignment[0].push_back(roles[0][i]);
         assignment[1].push_back(roles[1][j]);
+ 
         return true;
       }
       conflict = false;
