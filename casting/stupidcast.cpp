@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>    /* random_shuffle */
 #include <assert.h>
 #include <map>
 #include <stdlib.h>     /* srand, rand */
@@ -57,14 +58,15 @@ int main(){
 
   stupidStuff();
 
-  greedyStuff();
-
+  for(int i=0;i<10;++i)
+    greedyStuff();
+/*
   for(int i = 0; i < 1000; ++i){
     int randomActor = (rand() % k-3) + 2;
     if(randomActor < 2)
       continue;
     localSearch(randomActor);
-  }
+  }*/
 
   //For testing
   //verifySolution();
@@ -77,6 +79,7 @@ int main(){
 }
 
 void localSearch(int actor){
+
   int usedActors = countUsedActors(assignment);
   vector<vector<int>> prevAssignment = assignment;
   vector<int> prevAssigned = assigned;
@@ -177,16 +180,15 @@ void localSearch(int actor){
     conflict = false;
   }
 
-/*
+
   int newEnergy = countUsedActors(assignment) - usedActors;
-  if(newEnergy >= -5 ){
+  if(newEnergy <= 5 ){
     return;
   }else{
     assignment = prevAssignment;
     assigned = prevAssigned;
   }
 
-*/
 
 }
 
@@ -194,8 +196,14 @@ void localSearch(int actor){
 
 void greedyStuff(){
 
-  //int usedActors = countUsedActors(assignment);
+  int usedActors = countUsedActors(assignment);
+  vector<vector<int>> prevAssignment = assignment;
+  vector<int> prevAssigned = assigned;
   bool conflict = false;
+
+  for(auto it = roles.begin(); it != roles.end(); ++it){
+    random_shuffle(it->begin(), it->end());
+  }
 
 
   for(int actor = 0; actor < k; ++actor){
@@ -229,6 +237,15 @@ void greedyStuff(){
       conflict = false;
     }
   }
+
+  int newEnergy = countUsedActors(assignment) - usedActors;
+  if(newEnergy <= 5 ){
+    return;
+  }else{
+    assignment = prevAssignment;
+    assigned = prevAssigned;
+  }
+
 }
 
 bool checkForConflict(int possibleRole, int actor){
