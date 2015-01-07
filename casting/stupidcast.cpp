@@ -73,8 +73,38 @@ int main(){
   for(int j=0; j < 3; ++j){
     for(int i = 2; i < k; ++i)
       localSearch(i);
-
   }
+
+  for(int i=0; i < 3; ++i){
+    vector<vector<int>> prevAssignment = assignment;
+    vector<int> prevAssigned = assigned;
+    int usedActors = countUsedActors(assignment);
+
+    //Reset
+    assignment = vector<vector<int>>(k+n,vector<int>(0));
+
+    assigned = vector<int>(n);
+    for(auto it=assigned.begin(); it != assigned.end(); ++it){
+      *it = -1;
+    }
+
+    stupidStuff();
+
+    for(int i=0;i<10;++i)
+      greedyStuff();
+ 
+    for(int j=0; j < 3; ++j){
+      for(int i = 2; i < k; ++i)
+        localSearch(i);
+    }
+
+    int newEnergy = countUsedActors(assignment) - usedActors;
+    if(newEnergy > 0 ){
+      assignment = prevAssignment;
+      assigned = prevAssigned;
+    }
+  }
+
   printSolution(); 
 }
 
