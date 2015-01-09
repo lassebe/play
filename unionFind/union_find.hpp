@@ -3,7 +3,7 @@
 struct union_find {
 public:
   union_find(const int n){
-    uf = std::vector<int> uf(n, -1);
+    uf = std::vector<int>(n, -1);
   }
 
   bool unify(int x, int y){
@@ -24,7 +24,7 @@ public:
 
   int find(int x){
     if(uf[x] < 0){
-      return x
+      return x;
     }else{
       uf[x] = find(uf[x]);
     }
