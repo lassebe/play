@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+
+\section*{3.1}
+\subsection*{a}
+$1/52 * 1/51 = 1/2652 = 0.00038 $ \\
+\subsection*{b}
+$4/52 * 3/51 = 1/221 = 0.004 $ \\
+\subsection*{c}
+$48/52 * 47/51 = 188/221 = 0.85$ \\
+\subsection*{d}
+The probability of picking the ace of hearts on the first draw is $1/52$ and $1/51$ on the second. \\
+The other option includes picking one of the other aces, and another card that is hearts, which gives $3/52$ and $12/51$ respectively. \\
+Which gives the final probability of: \\
+$(1/52*1/51)+(3/52*12/51) = 0.014$
+
+\section*{3.2}
+$P(C|R) = 0.9$, $P(C) = 0.4$ ,$P(R) = 0.25$ \\
+We apply Bayes theorem that says: \\
+$P(R|C) = P(R)*P(C|R) / P(C) $ \\
+$P(R|C) = 0.25*0.9 / 0.4 = 0.5625$ \\
+
+\section*{3.3}
+$P(B) = 0.01$, $P(H|B) = 0.75$. \\
+The probability of two heads given biased coin is $P(2H|B) = \binom{10}{2}*0.75^{2}*(0.25)^{8} = 405/1048576 $ \\
+The probability of two heads given fair coin is $P(2H|\neg B) = \binom{10}{2}*0.5^{10} = 45/1024 $ \\
+$P(B|2H) = \frac{P(B)*P(2H|B)}{P(B)*P(2H|B)+(1-P(B))*P(2H|\neg B)} = \frac{0.01*405/1048576}{(0.01*405/1048576)+(0.99*45/1024)} = 1/11265 = 0.00008877$ \\
+\end{document}

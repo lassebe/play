@@ -1,0 +1,77 @@
+\documentclass{article}
+\begin{document}
+
+\section*{2.1}
+
+\subsection*{2.19}
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+  $A_{1}$ & -3 & -21 & -7 \\ \cline{2-4}
+  $A_{2}$ & -5 & 0 & 0 \\ \cline{2-4} 
+  $A_{3}$ & 0 & -26 & -12 \\ \cline{2-4} 
+\end{tabular}\\ 
+The minimax regret act is A2. \\
+
+\subsection*{2.20}
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+  $A_{1}$ & 0 & 0 & -4 \\ \cline{2-4}
+  $A_{2}$ & -8 & -12 & 0 \\ \cline{2-4} 
+  $A_{3}$ & -1 & -15 & -1 \\ \cline{2-4} 
+\end{tabular}\\
+The minimax regret act is A1. \\
+
+\section*{2.2}
+
+\subsection*{Decision table}
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+  $A_{1}$ & 6 & 5 & 8 \\ \cline{2-4}
+  $A_{2}$ & 5 & 5 & 8 \\ \cline{2-4} 
+  $A_{3}$ & 10 & 10 & 0 \\ \cline{2-4} 
+\end{tabular}\\ \\
+
+\subsection*{Regret table}
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+  $A_{1}$ & -4 & -5 & 0 \\ \cline{2-4}
+  $A_{2}$ & -5 & -5 & 0 \\ \cline{2-4} 
+  $A_{3}$ & 0 & 0 & -8 \\ \cline{2-4} 
+\end{tabular}\\ 
+\\A1 dominates A2, but the minimax regret rule evalutes them as equivalent, because they both get their maximum regret from A3.
+
+
+\section*{2.3}
+
+\begin{tabular}{l|l|l|l|}
+\cline{2-4}
+  $A_{1}$ & 10 & 100 & 150 \\ \cline{2-4}
+  $A_{2}$ & 10 & 12 & 150 \\ \cline{2-4} 
+\end{tabular}\\ 
+\\A1 dominates A2, but since the Optimism-Pessimism rule only looks at the best and worst case, it evalutes them as equivalent.
+
+\section*{2.4}
+\subsection*{Decision table}
+\begin{tabular}{l|l|l|l||l|}
+\cline{2-5}
+  & & & & EMV \\ \cline{2-5}
+  $A_{1}$ & 1 & 15 & 15 & 31/3 \\ \cline{2-5}
+  $A_{2}$ & 5 & 12 & 15 & 32/3 \\ \cline{2-5}
+\end{tabular} \\
+
+\subsection*{Transformed table}
+We transform by mapping $1 \to 4$, and all other numbers to themselves. \\
+\begin{tabular}{l|l|l|l||l|}
+\cline{2-5}
+  & & & & EMV \\ \cline{2-5}
+  $A_{1}$ & 4 & 15 & 15 & 34/3 \\ \cline{2-5}
+  $A_{2}$ & 5 & 12 & 15 & 32/3 \\ \cline{2-5}
+\end{tabular}
+
+\section*{2.5}
+In the decision table, we calculate the Regret R, which is $u - Max$ for each $u$ in the table, where $Max$ is the maximum value in each column. \\ 
+We transform by $a*u + b, a \geq 0$. \\
+Then the Maximum for each column will be $a*Max + b$. \\
+The new regret $R'$ will be $(a*u + b) - (a*Max + b) = a*(u-Max) = a*R$. QED.
+
+\end{document}

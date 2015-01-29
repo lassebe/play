@@ -75,6 +75,8 @@ int main(){
       localSearch(i);
   }
 
+
+  // Do everything a couple more times
   for(int i=0; i < 3; ++i){
     vector<vector<int>> prevAssignment = assignment;
     vector<int> prevAssigned = assigned;
@@ -256,13 +258,6 @@ void greedyStuff(){
         }
         assignment[actor].push_back(possibleRole);
         assigned[possibleRole] = actor;
-
-        //If the old solution was better, revert
-        /*if(usedActors < countUsedActors(assignment)){
-          assignment[assigned[possibleRole]].pop_back();
-          assignment[prevActor].push_back(possibleRole);
-          assigned[possibleRole] = prevActor;
-        }*/
       }
       conflict = false;
     }

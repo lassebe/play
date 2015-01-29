@@ -1,0 +1,100 @@
+\documentclass{article} 
+\usepackage{tikz}
+\begin{document}
+
+\section*{1.1}
+a. Jones chooses his bet in a roulette game.\\
+Under risk, given that Jones understands the given probabilities.\\ \\
+b. Smith decides between seeking and not seeking a spouse.\\
+Under ignorance, it's very hard to approximate the probability of finding a spouse if he seeks one. \\ \\
+c. A veterinarian decides whether to put a healthy stray dog to sleep or to adopt it as his own pet.\\
+Under certainty, given that the dog is healthy, and the veterinarian has some previous knowledge. \\ \\
+d. A student trying to satisfy degree requirements chooses among the courses currently available. \\
+In an ideal world, under certainty. Given that the university provides enough information to the student. \\ \\
+e. A lawyer decides whether to accept an out-of-court settlement or to take her client's case to trial.\\
+Under risk, given that the lawyer has experience in the field. \\ \\
+
+\section*{1.2}
+
+\tikzstyle{decision} = [rectangle, minimum height=14pt, minimum width=14pt, draw=black, fill=none, ultra thick, inner sep=0pt]
+\tikzstyle{chance} = [circle, minimum width=14pt, draw=black, fill=none, ultra thick, inner sep=0pt]
+\tikzstyle{line} = [draw=none]
+
+\tikzset{
+grow=right,
+sloped,
+join=miter,
+level 1/.style={sibling distance=5cm,level distance=5.2cm},
+level 2/.style={sibling distance=4cm, level distance=6.7cm},
+level 3/.style={sibling distance=3cm, level distance=6.7cm},
+edge from parent/.style={ultra thick, draw=black},
+edge from parent path={(\tikzparentnode.east) -- (\tikzchildnode.west)},
+every node/.style={text ragged, inner sep=1mm}
+}
+
+\begin{tikzpicture}[scale = 0.5]
+\small
+\node[decision]{}
+    child{
+      node[chance]{}
+      child{
+        node[chance]{}
+        child{
+          node[chance]{}
+            child{
+              node[chance]{50k}
+              edge from parent
+                node[below]{Win}
+            }
+            child{
+              node[chance]{0}
+              edge from parent
+                node[below]{Lose}
+            }
+            edge from parent
+            node[below]{Sue}
+        }
+        child{
+          node[chance]{10k}
+          edge from parent
+            node[below]{Don't sue}
+        }
+        edge from parent
+        node[below]{10k}
+      }
+      child{
+        node[chance]{25k}
+        edge from parent
+        node[below]{25k}
+      }
+      edge from parent
+      node[below]{Lawyer}
+    }
+    child{
+      node[chance]{10k}
+      edge from parent
+            node[below]{No lawyer}
+    };
+\end{tikzpicture}
+
+\section*{1.3}
+\begin{tabular}{ | l | c | r | }
+    \hline
+     & Loves & Doesn't love \\ \hline
+    Marry & 0 & 0  \\ \hline
+    Don't marry & 1M & 1M  \\
+    \hline
+\end{tabular}
+
+\section*{1.4}
+\begin{tabular}{ | l | c | r | r |}
+    \hline
+     & 0.7 & 0.3 &  \\
+     & Fog & No Fog & ETime \\ \hline
+    Train & -8 & -8 & -8 \\ \hline
+    Plane & -15 & -3 & -11.4 \\
+    \hline
+\end{tabular}
+
+
+\end{document}  
