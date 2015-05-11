@@ -28,7 +28,7 @@ public class Prim {
 		visited.add(v);
 		//unvisited.remove(v);
 		while(visited.size() < nodes){
-			int tempW=0;
+			int tempW;
 			for(int i=0; i < visited.size();i++){
 				int tempV=visited.get(i);
 				VertexIterator it = g.neighbors(tempV);

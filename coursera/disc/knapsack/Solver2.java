@@ -40,7 +40,7 @@ public class Solver2 {
 
     BufferedReader input =  new BufferedReader(new FileReader(fileName));
     try {
-        String line = null;
+        String line;
         while (( line = input.readLine()) != null){
             lines.add(line);
         }

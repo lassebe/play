@@ -112,11 +112,9 @@ public class HashGraph implements Graph {
 		public boolean hasNext() {
 			if(it == null)
 				return false;
-			
-			if(it.hasNext())
-				return true;
-			
-			return false;
+
+			return it.hasNext();
+
 		}
 
 		@Override
@@ -142,12 +140,9 @@ public class HashGraph implements Graph {
 	
 		if(edges[v] == null)
 			return false;
-		
-		if(edges[v].containsKey(w) ){
-			return true;
-		}
-		
-		return false;
+
+		return edges[v].containsKey(w);
+
 	}
 
 

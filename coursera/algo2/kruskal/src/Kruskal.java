@@ -35,7 +35,7 @@ public class Kruskal {
 				
 				return 0;
 			}
-		};
+		}
 
 		edges = io.getInt();
 		uf = new UnionFind(edges);
