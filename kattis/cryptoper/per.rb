@@ -1,1 +1,1 @@
-puts STDIN.gets.scan(/.../).map { |str| str.chars.zip("PER".chars).reject { |c1,c2| c1 == c2 }.length }.reduce(:+)
+puts STDIN.gets.
