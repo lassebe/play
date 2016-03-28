@@ -1,18 +1,14 @@
-while true
-  arr = STDIN.gets.split(" ")
-  break if arr[0] == "0"
+input = STDIN.gets.split(" ").map(&:to_i)
 
-  rot = arr[0].to_i
-  line = arr[1]
-  alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,_,.".split(",")
+n = input[0]
+b = input[1]
+max = 0
+(0..b).each do |i|
+  max = max + 2**i
+end
 
-  line.reverse!
-  out = ""
-  line.chars do |c|
-    index = alphabet.find_index c
-    out << alphabet[(index+rot) % alphabet.size]
-  end
-
-  puts out
-
+if n <= max 
+  puts "yes"
+else
+  puts "no"
 end
