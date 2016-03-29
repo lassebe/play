@@ -1,40 +1,21 @@
-n = STDIN.gets.to_i
+line = STDIN.gets.strip.chars.map(&:to_i)
+
+zoom = line.size
+
+xmin = 0
+ymin = 0
 
 
-def encrypt str
-  k = 1
-  (k..100).each do |i|
-    if i*i >= str.length
-      k = i
-      break
-    end
+line.each_with_index do |key,index|
+  diff = 2 **(zoom-1-index)
+  if key == 1
+    xmin = xmin + diff
+  elsif key == 2
+    ymin = ymin + diff
+  elsif key == 3
+    xmin = xmin + diff
+    ymin = ymin + diff
   end
-
-  matrix = []
-  (0...k).each do |x|
-    arr = []
-    (0...k).each do |y|
-      if (x*k)+y < str.length
-        arr << str[(x*k)+y]
-      else
-        arr << "*"
-      end
-    end
-    matrix << arr
-  end
-  
-  matrix.transpose.map(&:reverse).each do |line|
-    (0...k).each do |y|
-      if line[y] != "*"
-        print line[y]
-      end
-    end
-  end
-  puts
 end
 
-(0...n).each do |i|
-  line = STDIN.gets.strip
-  encrypt line
-end
-    
+print "#{zoom} #{xmin} #{ymin}" 
