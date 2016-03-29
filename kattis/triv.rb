@@ -1,21 +1,11 @@
-line = STDIN.gets.strip.chars.map(&:to_i)
+line = STDIN.readlines.map(&:strip)
 
-zoom = line.size
+line.each do |l|
+  break if l == "0 0 0"
+  arr = l.split(" ").map(&:to_f)
+  radius = arr[0]
+  square_area = (2*radius)**2
 
-xmin = 0
-ymin = 0
+  puts "#{radius*radius*Math::PI} #{(arr[2]/arr[1])*square_area}"
 
-
-line.each_with_index do |key,index|
-  diff = 2 **(zoom-1-index)
-  if key == 1
-    xmin = xmin + diff
-  elsif key == 2
-    ymin = ymin + diff
-  elsif key == 3
-    xmin = xmin + diff
-    ymin = ymin + diff
-  end
 end
-
-print "#{zoom} #{xmin} #{ymin}" 
