@@ -1,11 +1,32 @@
-line = STDIN.readlines.map(&:strip)
+dogs = STDIN.gets.split(" ").map(&:to_i)
+dog_a = []
+dog_b = []
+(0...200).each do |i|
+  (0...dogs[0]).each do
+    dog_a << true
+  end
+  (0...dogs[1]).each do 
+    dog_a << false
+  end
+  
+  (0...dogs[2]).each do
+    dog_b << true
+  end
+  (0...dogs[3]).each do 
+    dog_b << false
+  end
 
-line.each do |l|
-  break if l == "0 0 0"
-  arr = l.split(" ").map(&:to_f)
-  radius = arr[0]
-  square_area = (2*radius)**2
+end
 
-  puts "#{radius*radius*Math::PI} #{(arr[2]/arr[1])*square_area}"
+arrival = STDIN.gets.split(" ").map(&:to_i)
 
+arrival.each do |arr|
+  if dog_a[arr-1] and dog_b[arr-1]
+    puts "both"
+  elsif dog_a[arr-1] or dog_b[arr-1]
+    puts "one"
+  else
+    puts "none"
+  end
+      
 end
