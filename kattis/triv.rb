@@ -1,27 +1,13 @@
-def insertion_sort arr
-  steps = 0
-  sorted = [arr[0]]
-  (1...arr.size).each do |i|
-    #p sorted
-    sorted.each_with_index do |el,index|
-      next if arr[i] >= el
-
-      steps = steps + (sorted.size-index)
-      sorted.insert(index,arr[i])
-      break
-    end
-    sorted = sorted.push(arr[i]) if sorted.size != i+1
-    #p sorted
-   # puts steps
+input = STDIN.readlines.map(&:strip)
+p input
+input.each do |line|
+  radius = line.split(" ")[0].to_f
+  x = line.split(" ")[1].to_f
+  y = line.split(" ")[2].to_f
+  if Math.sqrt((x-radius)**2 + (y-radius)**2) <= radius
+    puts "miss"
+    next
   end
-  steps
-end
 
-
-tests = STDIN.gets.to_i
-
-(0...tests).each do |t|
-  line = STDIN.gets.split(" ").map(&:to_i)[1..-1]
-#  p line
-  puts "#{t+1} #{insertion_sort line}"
+  
 end
