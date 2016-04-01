@@ -1,13 +1,17 @@
-input = STDIN.readlines.map(&:strip)
-p input
-input.each do |line|
-  radius = line.split(" ")[0].to_f
-  x = line.split(" ")[1].to_f
-  y = line.split(" ")[2].to_f
-  if Math.sqrt((x-radius)**2 + (y-radius)**2) <= radius
-    puts "miss"
-    next
+tests = STDIN.gets.to_i
+
+(0...tests).each do |test|
+  turtles = STDIN.gets.split(" ").map(&:to_i)
+
+  lower_bound = 0
+  prev = turtles[0]
+  (1...turtles.size).each do |turtle|
+    if turtles[turtle] > 2*prev
+      lower_bound = lower_bound + (turtles[turtle] - 2*prev)
+    end
+
+    prev = turtles[turtle]
   end
 
-  
+  puts lower_bound
 end
