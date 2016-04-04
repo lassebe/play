@@ -1,17 +1,22 @@
-tests = STDIN.gets.to_i
+line = STDIN.gets.strip
 
-(0...tests).each do |test|
-  turtles = STDIN.gets.split(" ").map(&:to_i)
+hash = Hash.new(0)
 
-  lower_bound = 0
-  prev = turtles[0]
-  (1...turtles.size).each do |turtle|
-    if turtles[turtle] > 2*prev
-      lower_bound = lower_bound + (turtles[turtle] - 2*prev)
-    end
+line.chars do |c|
 
-    prev = turtles[turtle]
+  hash[c] = (hash[c] + 1) % 2
+end
+
+uneven = 0
+
+hash.each do |key,val|
+  if val == 1
+    uneven = uneven + 1
   end
+end
 
-  puts lower_bound
+if uneven >= 1
+  puts uneven-1
+else
+  puts 0
 end
