@@ -1,22 +1,20 @@
-line = STDIN.gets.strip
+n = STDIN.gets.to_i
 
-hash = Hash.new(0)
+actual_minutes = 0
+sl_seconds = 0
 
-line.chars do |c|
+(0...n).each do |i|
 
-  hash[c] = (hash[c] + 1) % 2
+  line = STDIN.gets.strip.split(" ").map(&:to_i)
+  actual_minutes = actual_minutes + line[0]
+  sl_seconds = sl_seconds + line[1]
+
 end
 
-uneven = 0
+average_sl_minutes = sl_seconds.to_f / (actual_minutes.to_f*60)
 
-hash.each do |key,val|
-  if val == 1
-    uneven = uneven + 1
-  end
-end
-
-if uneven >= 1
-  puts uneven-1
+if average_sl_minutes <= 1.0
+  puts "measurement error"
 else
-  puts 0
+  puts average_sl_minutes
 end
