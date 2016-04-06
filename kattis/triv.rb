@@ -1,20 +1,40 @@
-n = STDIN.gets.to_i
+def is_permuted(arr) 
+  arr.sort!
+  permuted = true
+  diff = arr[1] - arr[0]
+  (2...arr.size).each do |i|
+    if arr[i] - arr[i-1] != diff
+      permuted = false
+      break
+    end
+  end
 
-actual_minutes = 0
-sl_seconds = 0
-
-(0...n).each do |i|
-
-  line = STDIN.gets.strip.split(" ").map(&:to_i)
-  actual_minutes = actual_minutes + line[0]
-  sl_seconds = sl_seconds + line[1]
-
+  if permuted
+    puts "permuted arithmetic"
+  else
+    puts "non-arithmetic"
+  end
 end
 
-average_sl_minutes = sl_seconds.to_f / (actual_minutes.to_f*60)
 
-if average_sl_minutes <= 1.0
-  puts "measurement error"
-else
-  puts average_sl_minutes
+n = STDIN.gets.to_i
+
+
+
+(0...n).each do |t|
+  arr = STDIN.gets.strip.split(" ").map(&:to_i)[1..-1]
+
+  arithmetic = true
+
+  diff = arr[1] - arr[0]
+  (2...arr.size).each do |i|
+    if arr[i] - arr[i-1] != diff
+      arithmetic = false
+      is_permuted(arr)
+      break
+    end
+  end
+  if arithmetic
+    puts "arithmetic"
+  end
 end
