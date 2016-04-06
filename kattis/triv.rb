@@ -1,40 +1,24 @@
-def is_permuted(arr) 
-  arr.sort!
-  permuted = true
-  diff = arr[1] - arr[0]
-  (2...arr.size).each do |i|
-    if arr[i] - arr[i-1] != diff
-      permuted = false
-      break
-    end
-  end
+input = STDIN.gets.split(" ")
 
-  if permuted
-    puts "permuted arithmetic"
+h = input[0].to_i
+
+root = 2**(h+1)-1
+if input.size == 1
+  puts root
+  exit(0)
+end
+
+
+line = input[1]
+
+i = 1
+line.chars.each do |c|
+  if c == "L"
+    i = i * 2
   else
-    puts "non-arithmetic"
+    i = i * 2 + 1
   end
 end
 
 
-n = STDIN.gets.to_i
-
-
-
-(0...n).each do |t|
-  arr = STDIN.gets.strip.split(" ").map(&:to_i)[1..-1]
-
-  arithmetic = true
-
-  diff = arr[1] - arr[0]
-  (2...arr.size).each do |i|
-    if arr[i] - arr[i-1] != diff
-      arithmetic = false
-      is_permuted(arr)
-      break
-    end
-  end
-  if arithmetic
-    puts "arithmetic"
-  end
-end
+puts root-(i-1)
