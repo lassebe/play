@@ -1,13 +1,15 @@
-lines = STDIN.readlines.map(&:strip)
+while true
+  line = STDIN.gets.strip
+  break if line == "0"
 
-lines.each do |line|
-  arr = line.split(" ").map(&:to_i)
-  (0...arr.size).each do |i|
-    copy =  line.split(" ").map(&:to_i)
-    copy.delete_at(i)
-    if arr[i] == copy.reduce(:+)
-      puts arr[i]
-      break
-    end
-  end
+  line = line.split(" ").map(&:to_f)
+
+  x = line[0]
+  y = line[1]
+  x2 = line[2]
+  y2 = line[3]
+  p = line[4]
+
+  puts sprintf('%.10f', ((x-x2).abs**p + (y-y2).abs**p)**(1/p))
+
 end
