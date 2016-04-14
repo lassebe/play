@@ -1,15 +1,21 @@
-while true
+tests = STDIN.gets.to_i
+
+
+(0...tests).each do |t|
+  hash = {}
+  sounds = STDIN.gets.strip.split(" ")
   line = STDIN.gets.strip
-  break if line == "0"
+  while line != "what does the fox say?"
+    line = line.split(" ")
+    animal = line[0]
+    goes = line[2]
+    hash[goes] = animal
+    line = STDIN.gets.strip
+  end
 
-  line = line.split(" ").map(&:to_f)
-
-  x = line[0]
-  y = line[1]
-  x2 = line[2]
-  y2 = line[3]
-  p = line[4]
-
-  puts sprintf('%.10f', ((x-x2).abs**p + (y-y2).abs**p)**(1/p))
-
+  fox = ""
+  sounds.each do |sound|
+    fox << (sound + " ") if not hash.has_key? sound
+  end
+  puts fox
 end
