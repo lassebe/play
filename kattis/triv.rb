@@ -1,19 +1,16 @@
-lines = STDIN.readlines.map(&:strip)
-MAX_EARTH = 365
-MAX_MARS = 687
+n = STDIN.gets.to_i
 
-lines.each_with_index do |line,index|
-  
-  line = line.split(" ").map(&:to_i)
-  
-  earth = line[0]
-  mars = line[1]
-  count = 0
-  while earth != 0 or mars != 0
-    earth = (earth + 1) % MAX_EARTH
-    mars = (mars + 1)  % MAX_MARS
-    count = count + 1
+arr = STDIN.gets.strip.split(" ").map(&:to_i)
+
+ans = []
+
+arr.each do |a|
+  (0...256).each do |n|
+    if ((n<<1) ^ n) & 255 == a
+      ans << n
+      break
+    end
   end
-  
-  puts "Case #{index+1}: #{count}"
 end
+
+puts ans.join(" ")
