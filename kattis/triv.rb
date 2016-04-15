@@ -1,21 +1,19 @@
-tests = STDIN.gets.to_i
+lines = STDIN.readlines.map(&:strip)
+MAX_EARTH = 365
+MAX_MARS = 687
 
-
-(0...tests).each do |t|
-  hash = {}
-  sounds = STDIN.gets.strip.split(" ")
-  line = STDIN.gets.strip
-  while line != "what does the fox say?"
-    line = line.split(" ")
-    animal = line[0]
-    goes = line[2]
-    hash[goes] = animal
-    line = STDIN.gets.strip
+lines.each_with_index do |line,index|
+  
+  line = line.split(" ").map(&:to_i)
+  
+  earth = line[0]
+  mars = line[1]
+  count = 0
+  while earth != 0 or mars != 0
+    earth = (earth + 1) % MAX_EARTH
+    mars = (mars + 1)  % MAX_MARS
+    count = count + 1
   end
-
-  fox = ""
-  sounds.each do |sound|
-    fox << (sound + " ") if not hash.has_key? sound
-  end
-  puts fox
+  
+  puts "Case #{index+1}: #{count}"
 end
