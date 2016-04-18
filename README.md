@@ -17,14 +17,14 @@ Answers and Essay in Decision Theory.
 ### Evil Hangman
 Fun little exercise from some professors' homepage.
 
-### Flexspace
-Not entirely sure about this one. A Kattis problem?
-
 ### Heap
 This seems very very unfinished.
 
 ### Kattis
 A collection of Kattis problems.
+
+### PBA
+Physically Based Animation, for assignments in the UTokyo course.
 
 ### Tree
 Really should have a folder of data-structures.
