@@ -6,7 +6,7 @@ A collection of things that don't fit anywhere else. Mostly here to save on priv
 A solution to the extra-lab in ADK. Probably shouldn't be open to the public.
 
 ### Coursera
-Place for unfinished coursera stuff.
+Place for unfinished coursera stuff. TODO: Clean this up.
 
 ### Crypto
 Thought I was gonna make some simple implementations just to remember stuff from the Seminar course at UTokyo.
