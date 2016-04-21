@@ -1,7 +1,15 @@
-line = STDIN.gets.strip.split(" ")
-outer = line[0].to_i
-inner = line[1].to_i
+input = STDIN.gets.strip.split(" ").map(&:to_i)
 
-cheese = outer - inner
+n = input[0]
+p = input[1]
+q = input[2]
 
-puts "%.6f" % (100*(cheese**2*Math::PI) / (outer**2*Math::PI) )
+
+rounds = p+q
+
+
+if (rounds/n) % 2 == 0
+  puts "paul"
+else
+  puts "opponent"
+end
