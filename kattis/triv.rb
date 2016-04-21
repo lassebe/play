@@ -1,27 +1,18 @@
-lines = STDIN.readlines.map(&:strip)
+tests = STDIN.gets.to_i
 
-unique_names = Hash.new(0)
+(0...tests).each do |t|
+  line_a = STDIN.gets.strip
+  line_b = STDIN.gets.strip
+  puts line_a
+  puts line_b
 
-lines.each do |line|
-  first_name = line.split(" ").first
-  last_name = line.split(" ").last
-  unique_names[first_name] += 1
-end
-
-lines.sort! do |name_a,name_b|
-  name_a = name_a.split(" ")
-  name_b = name_b.split(" ")
-  if name_a.last == name_b.last 
-    name_a.first <=> name_b.first 
-  else
-    name_a.last <=> name_b.last
+  (0...line_a.size).each do |i|
+    if line_a[i] != line_b[i]
+      print "*"
+    else
+      print "."
+    end
   end
-end
-
-lines.each do |line|
-  if unique_names[line.split(" ").first] > 1
-    puts line
-  else
-    puts line.split(" ").first
-  end
+  puts
+  puts
 end
