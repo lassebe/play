@@ -1,18 +1,7 @@
-tests = STDIN.gets.to_i
+line = STDIN.gets.strip.split(" ")
+outer = line[0].to_i
+inner = line[1].to_i
 
-(0...tests).each do |t|
-  line_a = STDIN.gets.strip
-  line_b = STDIN.gets.strip
-  puts line_a
-  puts line_b
+cheese = outer - inner
 
-  (0...line_a.size).each do |i|
-    if line_a[i] != line_b[i]
-      print "*"
-    else
-      print "."
-    end
-  end
-  puts
-  puts
-end
+puts "%.6f" % (100*(cheese**2*Math::PI) / (outer**2*Math::PI) )
