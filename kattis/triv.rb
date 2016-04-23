@@ -1,38 +1,26 @@
-input = STDIN.gets.strip.split(" ").map(&:to_i)
+n = STDIN.gets.to_i
 
-c = input.first
-n = input.last
+building = Hash.new(false)
 
-consistent = true
-on_train = 0
 (0...n).each do |i|
-  station = STDIN.gets.strip.split(" ").map(&:to_i)
-  left = station[0]
-  enter = station[1]
-  wait = station[2]
-  
-  if on_train - left < 0 
-    consistent = false
-    break
-  end
-  
-  on_train -= left
-  
-  if on_train + enter > c
-    consistent = false
-    break
-  end
-  
-  on_train += enter
+  line = STDIN.gets.strip.split(" ")
+  entry = false
+  entry = true if line[0] == "entry"
 
-  if wait > 0 and on_train < c
-    consistent = false
-    break
+  name = line.last
+  if entry
+    if building.has_key? name
+      puts "#{name} entered (ANOMALY)"
+    else
+      puts "#{name} entered"
+      building[name] = true
+    end
+  else
+    if building.has_key? name
+      puts "#{name} exited"
+      building.delete name
+    else
+      puts "#{name} exited (ANOMALY)"
+    end 
   end
-end
-
-if consistent and on_train == 0
-  puts "possible"
-else
-  puts "impossible"
 end
