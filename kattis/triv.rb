@@ -1,7 +1,18 @@
 line = STDIN.gets.strip.split(" ").map(&:to_i)
-print "#{1-line[0]} "
-print "#{1-line[1]} "
-print "#{2-line[2]} "
-print "#{2-line[3]} "
-print "#{2-line[4]} "
-print "#{8-line[5]}\n"
+a = line.first
+b = line.last
+
+prng = Random.new
+alphabet = ("a"..."z").to_a
+
+size = 15
+essay = []
+(0...b).each do |w|
+  word = []
+  (0...size).each do |letter|
+    word << alphabet[prng.rand(25)]
+  end
+  essay << word.join("")
+end
+
+puts essay.join(" ")
