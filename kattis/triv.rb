@@ -1,26 +1,7 @@
-n = STDIN.gets.to_i
-
-building = Hash.new(false)
-
-(0...n).each do |i|
-  line = STDIN.gets.strip.split(" ")
-  entry = false
-  entry = true if line[0] == "entry"
-
-  name = line.last
-  if entry
-    if building.has_key? name
-      puts "#{name} entered (ANOMALY)"
-    else
-      puts "#{name} entered"
-      building[name] = true
-    end
-  else
-    if building.has_key? name
-      puts "#{name} exited"
-      building.delete name
-    else
-      puts "#{name} exited (ANOMALY)"
-    end 
-  end
-end
+line = STDIN.gets.strip.split(" ").map(&:to_i)
+print "#{1-line[0]} "
+print "#{1-line[1]} "
+print "#{2-line[2]} "
+print "#{2-line[3]} "
+print "#{2-line[4]} "
+print "#{8-line[5]}\n"
