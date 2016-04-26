@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <cmath>
 
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
-
-
-
 
 int main( void ) {
 
@@ -48,11 +46,13 @@ int main( void ) {
   glfwEnable( GLFW_STICKY_KEYS );
 
   // Dark blue background
-  glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+
 
   do{
     // Draw nothing, see you in tutorial 2 !
-
+    
     // Swap buffers
     glfwSwapBuffers();
     glfwPollEvents();
