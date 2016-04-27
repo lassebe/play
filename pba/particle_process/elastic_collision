@@ -7,8 +7,8 @@ int line_x_1=20,line_y_1=500,line_x_2=580,line_y_2=500;
 Particle p;
 
 void setup() {
-  init_pos = new PVector(40,400);
-  init_vel = new PVector(100,-50);
+  init_pos = new PVector(300,50);
+  init_vel = new PVector(0,0);
   p = new Particle(init_pos,init_vel);
   background(0);
   size(600, 600);
@@ -61,7 +61,9 @@ class Particle {
 
 void draw() {
   background(0);
+  line(20,400,580,400);
+  stroke(255);
   p.update();
-  if (p.pos.y + radius > 600 ) return;
+  if (p.pos.y + radius > 400 ) p.vel.y = -p.vel.y;
   ellipse(int(p.pos.x),int(p.pos.y),radius,radius);
 }
