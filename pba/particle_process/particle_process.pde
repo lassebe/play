@@ -6,10 +6,10 @@ int radius = 20;
 Particle p1,p2;
 
 void setup() {
-  init_pos = new PVector(200,400);
+  init_pos = new PVector(200,200);
   init_vel = new PVector(0,0);
   p1 = new Particle(init_pos,init_vel,true);
-  init_pos = new PVector(400,300);
+  init_pos = new PVector(400,200);
   p2 = new Particle(init_pos,init_vel,false);
   background(0);
   size(600, 600);
@@ -41,7 +41,7 @@ class Particle {
 
   // Euler
   void e_update_position() {
-    if ( pos.y < 400)
+    if ( pos.y < 200)
       System.out.println("DIVERGENT!");
     pos.add(PVector.mult(vel,dt));
     force_collision_detection();
@@ -91,7 +91,7 @@ void draw() {
   line(20,500,580,500);
   stroke(255);
   p1.update();
-  //p2.update();
+  p2.update();
   ellipse(int(p1.pos.x),int(p1.pos.y),2*radius,2*radius);
-  //ellipse(int(p2.pos.x),int(p2.pos.y),radius,radius);
+  ellipse(int(p2.pos.x),int(p2.pos.y),2*radius,2*radius);
 }
