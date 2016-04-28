@@ -2,14 +2,15 @@ PVector init_pos,init_vel;
 float dt = 0.1;
 float GRAVITY = 9.8;
 int radius = 20;
-int line_x_1=20,line_y_1=500,line_x_2=580,line_y_2=500;
 
-Particle p;
+Particle p1,p2;
 
 void setup() {
-  init_pos = new PVector(40,400);
-  init_vel = new PVector(100,-50);
-  p = new Particle(init_pos,init_vel);
+  init_pos = new PVector(200,400);
+  init_vel = new PVector(0,0);
+  p1 = new Particle(init_pos,init_vel,true);
+  init_pos = new PVector(400,300);
+  p2 = new Particle(init_pos,init_vel,false);
   background(0);
   size(600, 600);
 }
@@ -20,48 +21,77 @@ class Particle {
   PVector force;
   PVector prev_pos;
   float mass;
+  boolean e;
   
-  Particle(PVector pos_, PVector vel_) {
+  Particle(PVector pos_, PVector vel_, boolean euler) {
+    e = euler;
     pos = pos_;
     vel = vel_;
     force = new PVector(0,GRAVITY);
     mass = 1;
-    prev_pos = pos;
-    prev_pos = prev_pos.sub(vel);
-
+    prev_pos = PVector.sub(pos,PVector.mult(force,dt/mass));
   }
 
   void update() {
-    e_update_position();
-    e_update_velocity();
-  }
+    if (e)
+      e_update_position();
+    else
+      v_update_position();
+  } 
 
   // Euler
   void e_update_position() {
+    if ( pos.y < 400)
+      System.out.println("DIVERGENT!");
     pos.add(PVector.mult(vel,dt));
+    force_collision_detection();
+    update_velocity();
   }
 
-  void e_update_velocity() {
-    vel.add(PVector.mult(force,dt*(1/mass)));
+  void update_velocity() {
+    vel.add(PVector.mult(force,dt/mass));
   }
   
   // Verlet
   void v_update_position() {
-    System.out.println(pos);
-    PVector tmp = PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),PVector.mult(force,dt*dt*(1/mass)));
-    prev_pos = pos;
-    pos.add(tmp);
+    PVector acc = PVector.mult(force,dt*dt*(1/mass));
+    PVector tmp = pos;
+    PVector diff = PVector.sub(pos,prev_pos);
+    pos = PVector.add(PVector.add(pos,diff),acc);
+    prev_pos = tmp;
 
-    System.out.println(prev_pos);
   }
 
+  void force_collision_detection(){
+    if (pos.y+radius > 500 && vel.y > 0) {
+      vel.y = -vel.y;
+      pos.y = 500-radius;
+      //force_collision_response(false,true);
+    }
+  }
+
+  void force_collision_response(boolean x, boolean y){
+    if (x)
+      vel.x = -vel.x;
+    if (y) {
+      vel.y = -vel.y;
+      //pos.y = 500-radius;
+    }
+    e_update_position();
+  }
+
+  void position_collision_detection(){
+  }
 
 }
 
 
 void draw() {
   background(0);
-  p.update();
-  if (p.pos.y + radius > 600 ) return;
-  ellipse(int(p.pos.x),int(p.pos.y),radius,radius);
+  line(20,500,580,500);
+  stroke(255);
+  p1.update();
+  //p2.update();
+  ellipse(int(p1.pos.x),int(p1.pos.y),2*radius,2*radius);
+  //ellipse(int(p2.pos.x),int(p2.pos.y),radius,radius);
 }
