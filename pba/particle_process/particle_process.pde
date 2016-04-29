@@ -41,10 +41,10 @@ class Particle {
 
   // Euler
   void e_update_position() {
-    if ( pos.y < 200)
-      System.out.println("DIVERGENT!");
+    if (pos.y < 200) 
+      System.out.println("Divergent");
     pos.add(PVector.mult(vel,dt));
-    force_collision_detection();
+    collision_detection();
     update_velocity();
   }
 
@@ -57,27 +57,33 @@ class Particle {
     PVector acc = PVector.mult(force,dt*dt*(1/mass));
     PVector tmp = pos;
     PVector diff = PVector.sub(pos,prev_pos);
-    pos = PVector.add(PVector.add(pos,diff),acc);
-    prev_pos = tmp;
-
-  }
-
-  void force_collision_detection(){
-    if (pos.y+radius > 500 && vel.y > 0) {
-      vel.y = -vel.y;
-      pos.y = 500-radius;
-      //force_collision_response(false,true);
+    PVector next = PVector.add(PVector.add(pos,diff),acc);
+    if ( next.y  > 500  ){
+      float dist = next.y - pos.y;
+      prev_pos.y = next.y + dist;
+      pos.y = 500;
+      prev_pos.y -= next.y-500;
+      //pos.y = 500;
+    } else {
+      prev_pos = tmp;
+      pos = next;
     }
   }
 
-  void force_collision_response(boolean x, boolean y){
-    if (x)
-      vel.x = -vel.x;
-    if (y) {
-      vel.y = -vel.y;
-      //pos.y = 500-radius;
+  void collision_detection(){
+    if (pos.y+radius > 500 ) {
+      if (e) 
+        force_collision_response();
+      else 
+        position_collision_detection();
     }
-    e_update_position();
+  }
+
+  void force_collision_response(){
+    if ( vel.y > 0 )      
+      vel.y = -vel.y;
+    pos.y = 500-radius;
+
   }
 
   void position_collision_detection(){
@@ -90,6 +96,8 @@ void draw() {
   background(0);
   line(20,500,580,500);
   stroke(255);
+  line(20,200,580,200);
+  stroke(200);
   p1.update();
   p2.update();
   ellipse(int(p1.pos.x),int(p1.pos.y),2*radius,2*radius);
