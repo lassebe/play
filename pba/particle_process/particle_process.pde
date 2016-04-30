@@ -1,6 +1,6 @@
 PVector init_pos,init_vel;
-float dt = 0.1;
-float GRAVITY = 9.8;
+float dt = 0.5;
+float GRAVITY = 9.82;
 int radius = 20;
 
 Particle p1,p2;
@@ -29,7 +29,7 @@ class Particle {
     vel = vel_;
     force = new PVector(0,GRAVITY);
     mass = 1;
-    prev_pos = PVector.sub(pos,PVector.mult(force,dt/mass));
+    prev_pos = PVector.sub(pos,PVector.mult(vel,dt));
   }
 
   void update() {
@@ -58,12 +58,11 @@ class Particle {
     PVector tmp = pos;
     PVector diff = PVector.sub(pos,prev_pos);
     PVector next = PVector.add(PVector.add(pos,diff),acc);
-    if ( next.y  > 500  ){
+    if ( next.y  > 500-radius  ){
       float dist = next.y - pos.y;
-      prev_pos.y = next.y + dist;
-      pos.y = 500;
-      prev_pos.y -= next.y-500;
-      //pos.y = 500;
+      pos.y = 500-radius;
+      prev_pos.y = dist;
+      prev_pos.y += pos.y;
     } else {
       prev_pos = tmp;
       pos = next;
