@@ -1,5 +1,5 @@
 PVector init_pos,init_vel;
-float dt = 0.5;
+float dt = 0.1;
 float GRAVITY = 9.82;
 int radius = 20;
 
@@ -58,7 +58,12 @@ class Particle {
     PVector tmp = pos;
     PVector diff = PVector.sub(pos,prev_pos);
     PVector next = PVector.add(PVector.add(pos,diff),acc);
-    if ( next.y  > 500-radius  ){
+    if ( next.y  > 500-radius ){
+      System.out.println();
+      System.out.println("prev: " + prev_pos);
+      System.out.println("curr: " + pos);
+      System.out.println("next: " + next);
+
       float dist = next.y - pos.y;
       pos.y = 500-radius;
       prev_pos.y = dist;
@@ -99,6 +104,10 @@ void draw() {
   stroke(200);
   p1.update();
   p2.update();
+  fill(255,50);
   ellipse(int(p1.pos.x),int(p1.pos.y),2*radius,2*radius);
   ellipse(int(p2.pos.x),int(p2.pos.y),2*radius,2*radius);
+  fill(16711680);
+  ellipse(int(p1.pos.x),int(p1.pos.y),4,4);
+  ellipse(int(p2.pos.x),int(p2.pos.y),4,4);
 }
