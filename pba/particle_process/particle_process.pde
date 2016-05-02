@@ -58,6 +58,8 @@ class Particle {
     PVector tmp = pos;
     PVector diff = PVector.sub(pos,prev_pos);
     PVector next = PVector.add(PVector.add(pos,diff),acc);
+    collision_detection();
+
     if ( next.y  > 500-radius ){
       System.out.println();
       System.out.println("prev: " + prev_pos);
@@ -75,11 +77,10 @@ class Particle {
   }
 
   void collision_detection(){
-    if (pos.y+radius > 500 ) {
-      if (e) 
+    if (e){ 
+      if (pos.y > 500-radius )
         force_collision_response();
-      else 
-        position_collision_detection();
+    } else { 
     }
   }
 
@@ -90,7 +91,8 @@ class Particle {
 
   }
 
-  void position_collision_detection(){
+  void position_collision_response(){
+
   }
 
 }
