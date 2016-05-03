@@ -68,7 +68,7 @@ class Particle {
     }
   }
 
-  void collision_detection(float position){
+  boolean collision_detection(float position){
     return position  > 500-radius;
   }
 
