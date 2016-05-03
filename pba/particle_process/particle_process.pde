@@ -44,7 +44,8 @@ class Particle {
     if (pos.y < 200) 
       System.out.println("Divergent");
     pos.add(PVector.mult(vel,dt));
-    collision_detection();
+    if ( collision_detection(pos.y) )
+      force_collision_response();
     update_velocity();
   }
 
@@ -58,41 +59,36 @@ class Particle {
     PVector tmp = pos;
     PVector diff = PVector.sub(pos,prev_pos);
     PVector next = PVector.add(PVector.add(pos,diff),acc);
-    collision_detection();
-
-    if ( next.y  > 500-radius ){
-      System.out.println();
-      System.out.println("prev: " + prev_pos);
-      System.out.println("curr: " + pos);
-      System.out.println("next: " + next);
-
-      float dist = next.y - pos.y;
-      pos.y = 500-radius;
-      prev_pos.y = dist;
-      prev_pos.y += pos.y;
+    
+    if ( collision_detection(next.y) ) {
+      position_collision_response(next);
     } else {
       prev_pos = tmp;
       pos = next;
     }
   }
 
-  void collision_detection(){
-    if (e){ 
-      if (pos.y > 500-radius )
-        force_collision_response();
-    } else { 
-    }
+  void collision_detection(float position){
+    return position  > 500-radius;
   }
 
   void force_collision_response(){
-    if ( vel.y > 0 )      
+    if ( vel.y > 0 )
       vel.y = -vel.y;
     pos.y = 500-radius;
 
   }
 
-  void position_collision_response(){
+  void position_collision_response(PVector next){
+    System.out.println();
+    System.out.println("prev: " + prev_pos);
+    System.out.println("curr: " + pos);
+    System.out.println("next: " + next);
 
+    float dist = next.y - pos.y;
+    pos.y = 500-radius;
+    prev_pos.y = dist;
+    prev_pos.y += pos.y;
   }
 
 }
