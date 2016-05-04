@@ -1,16 +1,32 @@
-tests = STDIN.gets.to_i
-(0...tests).each do |t|
-  number_of_months = STDIN.gets.strip.split(" ")[1].to_i
-  months = STDIN.gets.strip.split(" ").map(&:to_i)
+dom_points = Hash.new(0)
 
-  lucky_days = 0
-  day_of_week = 0
-  months.each_with_index do |month,index|
-    (0...month).each do |day_of_month|
-      lucky_days += 1 if day_of_week == 5 and day_of_month == 12
-      day_of_week = (day_of_week + 1) % 7
-    end
+dom_points["A"] = 11
+dom_points["K"] = 4
+dom_points["Q"] = 3
+dom_points["J"] = 20
+dom_points["T"] = 10
+dom_points["9"] = 14
+
+normal_points = Hash.new(0)
+
+normal_points["A"] = 11
+normal_points["K"] = 4
+normal_points["Q"] = 3
+normal_points["J"] = 2
+normal_points["T"] = 10
+
+line = STDIN.gets.strip.split(" ")
+hands = line[0].to_i
+dominant = line[1]
+
+points = 0
+(0...4*hands).each do |c|
+  card = STDIN.gets.strip
+  if card[1] == dominant
+    points += dom_points[card[0]]
+  else
+    points += normal_points[card[0]]
   end
-
-  puts lucky_days
 end
+
+puts points

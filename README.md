@@ -11,6 +11,9 @@ Place for unfinished coursera stuff. TODO: Clean this up.
 ### Crypto
 Thought I was gonna make some simple implementations just to remember stuff from the Seminar course at UTokyo.
 
+### Data Structures
+What it says on the tin. Nothing interesting yet though.
+
 ### Dec
 Answers and Essay in Decision Theory.
 
@@ -25,9 +28,3 @@ A collection of Kattis problems.
 
 ### PBA
 Physically Based Animation, for assignments in the UTokyo course.
-
-### Tree
-Really should have a folder of data-structures.
-
-### Union-find
-See above.
