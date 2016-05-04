@@ -20,9 +20,6 @@ Answers and Essay in Decision Theory.
 ### Evil Hangman
 Fun little exercise from some professors' homepage.
 
-### Heap
-This seems very very unfinished.
-
 ### Kattis
 A collection of Kattis problems.
 
