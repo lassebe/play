@@ -1,32 +1,22 @@
-dom_points = Hash.new(0)
+l = STDIN.gets.to_i
+d = STDIN.gets.to_i
+x = STDIN.gets.to_i
 
-dom_points["A"] = 11
-dom_points["K"] = 4
-dom_points["Q"] = 3
-dom_points["J"] = 20
-dom_points["T"] = 10
-dom_points["9"] = 14
-
-normal_points = Hash.new(0)
-
-normal_points["A"] = 11
-normal_points["K"] = 4
-normal_points["Q"] = 3
-normal_points["J"] = 2
-normal_points["T"] = 10
-
-line = STDIN.gets.strip.split(" ")
-hands = line[0].to_i
-dominant = line[1]
-
-points = 0
-(0...4*hands).each do |c|
-  card = STDIN.gets.strip
-  if card[1] == dominant
-    points += dom_points[card[0]]
-  else
-    points += normal_points[card[0]]
+min = l
+(min..d).each do |m|
+  if m.to_s.split("").map(&:to_i).reduce(:+) == x
+    min = m
+    break
   end
 end
 
-puts points
+max = d
+(l..d).to_a.reverse.each do |m|
+  if m.to_s.split("").map(&:to_i).reduce(:+) == x
+    max = m
+    break
+  end
+end
+
+puts min 
+puts max 
