@@ -17,9 +17,9 @@
 Plotted with Wolfram Alpha:
 
 \subsection*{(a)}
-\includegraphics[scale=0.35]{1_a}\\ 
+\includegraphics[scale=0.35]{1_a.png}\\ 
 \subsection*{(b)}
-\includegraphics[scale=0.35]{1_b}
+\includegraphics[scale=0.35]{1_b.png}
 
 \newpage
 
@@ -63,9 +63,26 @@ I do not feel like I can guess the optimal solution from this region.
 
 I formulated the problem as the following program in SCIP.
 
+I replaced the expression $|x_2-10|$ in the objective function with the new variable $x_3$ and added constraints to ensure that no information was lost. Additionally I added four constraints to remove the two absolute values in the original constraint.
+
 \begin{verbatim}
+minimize
+  2x1 + 3x3
+subject to
+  x2 - x3 <= 10 
+  -x2 - x3 <= -10
+  x1 + 2 + x2 <= 5
+  x1 + 2 - x2 <= 5
+  -x1 - 2 + x2 <= 5
+  -x1 - 2 - x2 <= 5
+end
 \end{verbatim}
 
+The solution given as optimal by SCIP was: \\
+objective value: $22.5$\\
+$x_1: 0$ \\
+$x_2: 2.5$ \\
+$x_3: 7.5$ \\
 
 
 

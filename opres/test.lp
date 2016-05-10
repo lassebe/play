@@ -1,15 +1,10 @@
 minimize
-  5u+3v+6w
+  2x1 + 3x3
 subject to
-c5:  x<= 200
-c1:  x >= -100
-c2:  -u <= x 
-c6:  x <= u
-c3:  100-x >= -v  
-c7:  100-x <= v
-c4:  120-x >= -w  
-v8:  120-x <= w
-
-bounds
-x free
+  x2 - x3 <= 10 
+  -x2 - x3 <= -10
+  x1 + 2 + x2 <= 5
+  x1 + 2 - x2 <= 5
+  -x1 - 2 + x2 <= 5
+  -x1 - 2 - x2 <= 5
 end
