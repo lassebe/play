@@ -1,0 +1,85 @@
+\documentclass[12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+\usepackage{graphicx}
+
+\title{Assignment 1}
+\author{Lasse Berglund : 48-159707}
+\date{\today}
+
+% User ID student
+% Password biznet
+
+\begin{document}
+\maketitle
+\section*{1}
+\subsection*{(a)}
+By sorting the items by the ratio of their profit and weight we get the following order: \\
+
+$x_2,x_1.x_5,x_3,x_4$
+
+\subsection*{(b)}
+By selecting the items in the ordering given in (a) we get the resulting vector: \\
+$(1,1,1,0,1)$ \\
+That is we pick all items except $x_4$. \\
+Which gives us an objective value of 12.
+
+\subsection*{(c)}
+Given the following input: \\
+$max  \qquad 8x_1 + 7x_2$ \\
+$s.t.\  \ \qquad 8x_1 + x_2 \le 8$ \\
+$x_1,x_2 \in \{0,1\}$ \\
+
+Our greedy strategy would say that $x_1$ has a ratio of 1, whilst $x_2$ has a ratio of 7. As such it would lead us to pick x2 which is clearly not optimal.
+
+
+\newpage
+
+\section*{2}
+The graph described in the image can be mathematically described as a bipartite graph: \\
+$ \{ \{v_e,v_j,v_p,v_c,v_m\} \cup \{v_2,v_3,v_4,v_5 \},\\
+    \{(v_e,v_3),(v_e,v_5),(v_j,v_2),(v_j,v_4),(v_p,v_3),(v_c,v_2),(v_c,v_5),(v_m,v_4)\}\}$ \\
+\\
+At first we introduce variables $x_1,\ldots,x_8 \in \{0,1\}$, one for each edge in the graph, to be understood as follows. $x=1$ if the course represented by the left node is placed in the time slot represented by the right node. 
+\\
+\\
+After that we add constraints, first to model that we must take at least two from Math, Physics, and Chemistry (c1).
+\\
+We also need to model the fact that we can take at most one from English and Japanese (c2,c3).
+\\
+Then we add constraints to model the fact that only one course can be put in each time-slot (c4-c7).
+\\ 
+Finally we need to model the objective function, that is we want to maximize the number of courses that we take. That is simply the sum of the used edges.
+\\
+\\
+With all this we get the following Integer Programming problem: \\
+\begin{verbatim}
+maximize
+  x1+x2+x3+x4+x5+x6+x7+x8
+subject to
+  c1: x5+x6+x7+x8 >= 2
+  c2: x1+x2 <= 1
+  c3: x3+x4 <= 1
+  c4: x1+x5 <= 1
+  c5: x2+x7 <= 1
+  c6: x3+x6 <= 1
+  c7: x4+x8 <= 1
+
+binary
+x1 x2 x3 x4 x5 x6 x7 x8
+\end{verbatim}
+
+SCIP gives us the solution $(0,0,0,0,1,1,1,1)$, that is $x_1,\ldots,x_4 = 0$ and $x_5,\ldots,x_8 = 1$. Which in natural language means we put physics in period 3, chemistry in period 2 and 5, and math in period 4.
+
+\section*{3}
+\subsection*{(a)}
+
+
+\subsection*{(b)}
+
+
+
+\section*{4}
+
+\end{document}
