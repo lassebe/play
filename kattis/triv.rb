@@ -1,22 +1,20 @@
-l = STDIN.gets.to_i
-d = STDIN.gets.to_i
-x = STDIN.gets.to_i
+lines = STDIN.readlines.map(&:strip)
 
-min = l
-(min..d).each do |m|
-  if m.to_s.split("").map(&:to_i).reduce(:+) == x
-    min = m
-    break
+lines.each do |line|
+  char_count = Hash.new(0)
+  
+  n = line.size
+  # factorial
+  anagrams = (1..n).reduce(:*) || 1
+
+  line.chars.each do |c|
+    char_count[c] += 1
   end
-end
 
-max = d
-(l..d).to_a.reverse.each do |m|
-  if m.to_s.split("").map(&:to_i).reduce(:+) == x
-    max = m
-    break
+  char_count.keys.each do |key|
+    # divide by the factorial of the amount of times a letter occurs
+    anagrams /= ((1..char_count[key]).reduce(:*) || 1) if char_count != 1
   end
+  
+  puts anagrams
 end
-
-puts min 
-puts max 
