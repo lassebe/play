@@ -1,16 +1,26 @@
 PVector init_pos,init_vel;
-float dt = 0.02;
-float GRAVITY = 1000;
-int LEFT_EDGE = 200, RIGHT_EDGE = 400;
+final float dt = 0.1;
+final float GRAVITY = 0;
+final int LEFT_EDGE = 50, RIGHT_EDGE = 550;
+int ID_COUNTER = 0;
 int radius = 20;
-PVector wire;
 
-Particle p;
+
+ArrayList<Particle> particles;
+
+Particle p,p2;
 
 void setup() {
+  particles = new ArrayList<Particle>();
   init_pos = new PVector(300,300);
-  init_vel = new PVector(200,0);
+  init_vel = new PVector(50,0);
   p = new Particle(init_pos,init_vel);
+  init_pos = new PVector(400,300);
+  init_vel = new PVector(-50,0);
+  p2 = new Particle(init_pos,init_vel);
+
+  particles.add(p);
+  particles.add(p2);
   background(0);
   size(600, 600);
 }
@@ -22,6 +32,7 @@ class Particle {
   PVector prev_pos;
   float mass;
   boolean e;
+  int id;
   
   Particle(PVector pos_, PVector vel_) {
     pos = pos_;
@@ -30,6 +41,7 @@ class Particle {
     force = new PVector(0,GRAVITY);
     mass = 1;
     prev_pos = PVector.sub(pos,PVector.mult(vel,dt));
+    id = ID_COUNTER++;
   }
 
   void update() {
@@ -44,29 +56,49 @@ class Particle {
     //PVector diff = PVector.sub(pos,prev_pos);
     PVector next = PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),PVector.mult(force,dt*dt*(1/mass)));
     prev_pos = tmp;
-    pos = next;//PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),PVector.mult(force,dt*dt*(1/mass)));
+    pos = next;
 
     position_collision_response();
 
-    wire = new PVector(pos.x,300);
 
-    float projection = PVector.dot(pos,PVector.mult(wire,1/wire.mag()));
-    //PVector.mult(wire,PVector.dot(pos,wire)/PVector.dot(wire,wire));
-    //wire.x = projection;
-    pos.lerp(wire,1.0);
   }
 
-  void position_collision_response(){
-    float dist = pos.x - prev_pos.x;
+  void particle_collision() {
+    for ( Particle par : particles ) {
+      if ( par.id == this.id )
+        continue;
+
+      float distance = PVector.sub(par.pos,pos).mag();
+      if ( distance < radius + radius ) {
+        float penetration = (distance - (radius + radius)) / distance ;
+        pos.sub(PVector.mult(PVector.sub(pos,par.pos),penetration/2));
+      }
+    }
+  }
+
+  void position_collision_response() {
+    float x_dist = pos.x - prev_pos.x;
+    float y_dist = pos.y - prev_pos.y;
       //System.out.println(dist);
     if ( pos.x > RIGHT_EDGE - radius ) {
-      prev_pos.x = (RIGHT_EDGE-radius) + dist;
+      prev_pos.x = (RIGHT_EDGE-radius) + x_dist;
       pos.x = RIGHT_EDGE - radius;
     }
 
     if (pos.x < LEFT_EDGE + radius ){
-      prev_pos.x = (LEFT_EDGE + radius) + dist;
+      prev_pos.x = (LEFT_EDGE + radius) + x_dist;
       pos.x = LEFT_EDGE + radius;
+    }
+
+    if (pos.y > RIGHT_EDGE - radius ) {
+      prev_pos.y = (RIGHT_EDGE-radius) + y_dist;
+      pos.y = RIGHT_EDGE - radius;
+    }
+
+
+    if (pos.y < LEFT_EDGE + radius ) {
+      prev_pos.y = (LEFT_EDGE + radius) + y_dist;
+      pos.y = LEFT_EDGE + radius;
     }
     //System.out.println(dist);
     /*pos.x = 500-radius;
@@ -80,16 +112,21 @@ class Particle {
 void draw() {
   background(0);
   stroke(255);
-  line(LEFT_EDGE,300,RIGHT_EDGE,300);
+  // draw_box
+  line(LEFT_EDGE,LEFT_EDGE,LEFT_EDGE,RIGHT_EDGE);
+  line(LEFT_EDGE,RIGHT_EDGE,RIGHT_EDGE,RIGHT_EDGE);
+  line(LEFT_EDGE,LEFT_EDGE,RIGHT_EDGE,LEFT_EDGE);
+  line(RIGHT_EDGE,LEFT_EDGE,RIGHT_EDGE,RIGHT_EDGE);
   stroke(200);
 
+  for(Particle par : particles ) {
+    fill(255,50);
+    ellipse(int(par.pos.x),int(par.pos.y),2*radius,2*radius);
+    fill(16711680);
+    ellipse(int(par.pos.x),int(par.pos.y),4,4);
+    par.update();
 
-  fill(255,50);
-  ellipse(int(p.pos.x),int(p.pos.y),2*radius,2*radius);
+    par.particle_collision();
+  }
 
-  fill(16711680);
-  ellipse(int(p.pos.x),int(p.pos.y),4,4);
-  //line(p.pos.x,p.pos.y+50,p.prev_pos.x,p.prev_pos.y+50);
-
-  p.update();
 }
