@@ -13,19 +13,19 @@
 
 \begin{document}
 \maketitle
-\section*{1}
-\subsection*{(a)}
+\section*{1 -- Greedy Knapsack Strategy}
+\subsection*{(a) Calculate the ratio for each item, and sort items in its decreasing order of the ratios}
 By sorting the items by the ratio of their profit and weight we get the following order: \\
 
 $x_2,x_1.x_5,x_3,x_4$
 
-\subsection*{(b)}
+\subsection*{(b) Output of the strategy}
 By selecting the items in the ordering given in (a) we get the resulting vector: \\
 $(1,1,1,0,1)$ \\
 That is we pick all items except $x_4$. \\
 Which gives us an objective value of 12.
 
-\subsection*{(c)}
+\subsection*{(c) Showing non-optimality of strategy}
 Given the following input: \\
 $max  \qquad 8x_1 + 7x_2$ \\
 $s.t.\  \ \qquad 8x_1 + x_2 \le 8$ \\
@@ -36,7 +36,7 @@ Our greedy strategy would say that $x_1$ has a ratio of 1, whilst $x_2$ has a ra
 
 \newpage
 
-\section*{2}
+\section*{2 -- Subjects to timeslots}
 The graph described in the image can be mathematically described as a bipartite graph: \\
 $ \{ \{v_e,v_j,v_p,v_c,v_m\} \cup \{v_2,v_3,v_4,v_5 \},\\
     \{(v_e,v_3),(v_e,v_5),(v_j,v_2),(v_j,v_4),(v_p,v_3),(v_c,v_2),(v_c,v_5),(v_m,v_4)\}\}$ \\
@@ -75,7 +75,7 @@ binary
 
 SCIP gives us the solution $(0,0,0,0,1,1,1,1)$, that is $x_1,\ldots,x_4 = 0$ and $x_5,\ldots,x_8 = 1$. Which in natural language means we put physics in period 3, chemistry in period 2 and 5, and math in period 4.
 
-\section*{3}
+\section*{3 -- Maximum Matching and Minimum Vertex Cover}
 For maximum matching we have the following formulation:
 
 \begin{verbatim}
@@ -115,7 +115,7 @@ binary
 When solving them with SCIP we get two solutions for each with an objective value of 3. It turns out they are identical. 
 
 
-\section*{4}
+\section*{4 -- IP formulation of Knapsack problem}
 
 I decided to model the Knapsack problem in slide 13.
 
@@ -128,5 +128,7 @@ subject to
 binary
   x1 x2 x3 x4 x5
 \end{verbatim}
+
+When solving with SCIP we get the expected solution (1,1,1,0,1) as in the first problem in the assignment.
 
 \end{document}
