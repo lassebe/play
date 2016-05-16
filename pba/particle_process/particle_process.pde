@@ -3,7 +3,7 @@ final float dt = 0.1;
 final float GRAVITY = 0;
 final int LEFT_EDGE = 50, RIGHT_EDGE = 550;
 int ID_COUNTER = 0;
-int radius = 20;
+float radius = 20.0;
 
 
 ArrayList<Particle> particles;
@@ -13,10 +13,10 @@ Particle p,p2;
 void setup() {
   particles = new ArrayList<Particle>();
   init_pos = new PVector(300,300);
-  init_vel = new PVector(50,0);
+  init_vel = new PVector(0,50);
   p = new Particle(init_pos,init_vel);
-  init_pos = new PVector(400,300);
-  init_vel = new PVector(-50,0);
+  init_pos = new PVector(300,400);
+  init_vel = new PVector(0,-50);
   p2 = new Particle(init_pos,init_vel);
 
   particles.add(p);
@@ -63,18 +63,7 @@ class Particle {
 
   }
 
-  void particle_collision() {
-    for ( Particle par : particles ) {
-      if ( par.id == this.id )
-        continue;
 
-      float distance = PVector.sub(par.pos,pos).mag();
-      if ( distance < radius + radius ) {
-        float penetration = (distance - (radius + radius)) / distance ;
-        pos.sub(PVector.mult(PVector.sub(pos,par.pos),penetration/2));
-      }
-    }
-  }
 
   void position_collision_response() {
     float x_dist = pos.x - prev_pos.x;
@@ -100,12 +89,47 @@ class Particle {
       prev_pos.y = (LEFT_EDGE + radius) + y_dist;
       pos.y = LEFT_EDGE + radius;
     }
-    //System.out.println(dist);
-    /*pos.x = 500-radius;
-    prev_pos.x = dist;
-    prev_pos.x += pos.x;*/
+
   }
 
+}
+
+
+void particle_collision() {
+  for ( int i = 0; i < particles.size(); i++ ) {
+    Particle p_1 = particles.get(i);
+    for( int j = i+1; j < particles.size(); j++ ) {
+      Particle p_2 = particles.get(j);
+
+      PVector overlap = PVector.sub(p_1.pos,p_2.pos);
+      float distance = overlap.mag();
+      float target = radius + radius;
+      if ( distance  < target ) {
+        // Calculate previous "velocities"
+        PVector prev_vel_1 = PVector.sub(p_1.pos,p_1.prev_pos);
+        PVector prev_vel_2 = PVector.sub(p_2.pos,p_2.prev_pos);
+
+        // Resolve overlap by moving both particles halfway
+        float penetration = (distance - target) / distance ;
+        p_1.pos.sub(PVector.mult(overlap,penetration/2));
+        p_2.pos.add(PVector.mult(overlap,penetration/2));
+
+        // Calculate the projected component factors
+        float f1 = PVector.dot(overlap, prev_vel_1) / (distance*distance);
+        float f2 = PVector.dot(overlap, prev_vel_2) / (distance*distance);
+
+        // Swap projected components
+        prev_vel_1.add(PVector.sub(PVector.mult(overlap,f2),PVector.mult(overlap,f1)));
+        prev_vel_2.add(PVector.sub(PVector.mult(overlap,f1),PVector.mult(overlap,f2)));
+
+        // Update the previous position to it's 
+        // correct physical place
+        p_1.prev_pos = PVector.sub(p_1.pos,prev_vel_1);
+        p_2.prev_pos = PVector.sub(p_2.pos,prev_vel_2);
+
+      }
+    }
+  }
 }
 
 
@@ -126,7 +150,7 @@ void draw() {
     ellipse(int(par.pos.x),int(par.pos.y),4,4);
     par.update();
 
-    par.particle_collision();
+    particle_collision();
   }
 
 }
