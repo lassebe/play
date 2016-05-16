@@ -1,10 +1,11 @@
 PVector init_pos,init_vel;
 final float dt = 0.1;
-final float GRAVITY = 0;
+final float GRAVITY = 0;//9.82;
+final float GRAVITATIONAL_CONSTANT = 0.00001;
 final int N = 10;
 final int LEFT_EDGE = 50, RIGHT_EDGE = 550;
 int ID_COUNTER = 0;
-float radius = 20.0;
+float radius = 10.0;
 
 
 ArrayList<Particle> particles;
@@ -14,10 +15,10 @@ Particle p,p2;
 void setup() {
   particles = new ArrayList<Particle>();
   init_pos = new PVector(300,300);
-  init_vel = new PVector(0,50);
+  init_vel = new PVector(0,20);
   p = new Particle(init_pos,init_vel);
   init_pos = new PVector(300,400);
-  init_vel = new PVector(0,-50);
+  init_vel = new PVector(0,-20);
   p2 = new Particle(init_pos,init_vel);
 
   particles.add(p);
@@ -138,6 +139,21 @@ void particle_collision() {
   }
 }
 
+void gravity_field() {
+  for ( int i=0; i<particles.size(); i++ ) {
+    for( int j=0; j<particles.size(); j++ ) {
+      if ( i == j )
+        continue;
+      Particle p_i = particles.get(i);
+      Particle p_j = particles.get(j);
+      float distance = PVector.sub(p_j.pos,p_i.pos).mag();
+      p_i.force = PVector.mult(PVector.sub(p_j.pos,p_i.pos),
+                          GRAVITATIONAL_CONSTANT * p_i.mass * p_j.mass * (1/distance*distance*distance));
+
+    }
+  }
+}
+
 
 void draw() {
   background(0);
@@ -149,12 +165,14 @@ void draw() {
   line(RIGHT_EDGE,LEFT_EDGE,RIGHT_EDGE,RIGHT_EDGE);
   stroke(200);
 
-  for(Particle par : particles ) {
+  for ( Particle par : particles ) {
     fill(255,50);
     ellipse(int(par.pos.x),int(par.pos.y),2*radius,2*radius);
     fill(16711680);
     ellipse(int(par.pos.x),int(par.pos.y),4,4);
     par.update();
+
+    gravity_field();
 
     particle_collision();
   }
