@@ -57,12 +57,9 @@ class Particle {
   
   // Verlet
   void v_update_position() {
-    //PVector acc = PVector.mult(force,dt*dt*(1/mass));
     PVector tmp = pos;
-    //PVector diff = PVector.sub(pos,prev_pos);
-    PVector next = PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),PVector.mult(force,dt*dt*(1/mass)));
+    pos = PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),PVector.mult(force,dt*dt*(1/mass)));
     prev_pos = tmp;
-    pos = next;
 
     position_collision_response();
 

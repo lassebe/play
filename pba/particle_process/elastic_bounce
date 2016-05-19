@@ -53,16 +53,12 @@ class Particle {
   
   // Verlet
   void v_update_position() {
-    PVector acc = PVector.mult(force,dt*dt*(1/mass));
     PVector tmp = pos;
-    PVector diff = PVector.sub(pos,prev_pos);
-    PVector next = PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),acc);
-    
-      prev_pos = tmp;
-      pos = next;
-    if ( collision_detection(next.y) ) {
+    pos = PVector.add(PVector.add(pos,PVector.sub(pos,prev_pos)),PVector.mult(force,dt*dt*(1/mass)));
+    prev_pos = tmp;
+    if ( collision_detection(pos.y) )
       position_collision_response();
-    }
+    
   }
 
   boolean collision_detection(float position){
@@ -77,11 +73,9 @@ class Particle {
   }
 
   void position_collision_response(){
-
     float dist = pos.y - prev_pos.y;
     prev_pos.y = (500-radius) + dist;
     pos.y = 500 - radius;
-    System.out.println(prev_pos.y);
   }
 
 }

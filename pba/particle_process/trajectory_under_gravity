@@ -7,10 +7,11 @@ int line_x_1=20,line_y_1=500,line_x_2=580,line_y_2=500;
 Particle p1,p2;
 
 void setup() {
-  init_pos = new PVector(200,0.98);
-  init_vel = new PVector(0,0);
+  init_pos = new PVector(100,200);
+  init_vel = new PVector(40,-20);
   p1 = new Particle(init_pos,init_vel,true);
-  init_pos = new PVector(400,0.98);
+  init_pos = new PVector(400,200);
+  init_vel = new PVector(-40,-20);
   p2 = new Particle(init_pos,init_vel,false);
   background(0);
   size(600, 600);
@@ -43,12 +44,9 @@ class Particle {
   // Euler
   void e_update_position() {
     pos.add(PVector.mult(vel,dt));
-    update_velocity();
-  }
-
-  void update_velocity() {
     vel.add(PVector.mult(force,dt/mass));
   }
+
   
   // Verlet
   void v_update_position() {
