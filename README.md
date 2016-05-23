@@ -1,6 +1,6 @@
 Play
 ====
-A collection of things that don't fit anywhere else. Mostly here to save on private repos.
+A collection of things that don't fit anywhere else. 
 
 ### Casting
 A solution to the extra-lab in ADK. Probably shouldn't be open to the public.
