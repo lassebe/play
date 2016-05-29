@@ -2,6 +2,9 @@ Play
 ====
 A collection of things that don't fit anywhere else. 
 
+### Avalg
+Folder for the UTokyo Advanced Algorithms course. Currently only primality testing.
+
 ### Casting
 A solution to the extra-lab in ADK. Probably shouldn't be open to the public.
 
