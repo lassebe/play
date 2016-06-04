@@ -1,39 +1,82 @@
-# a program to generate complete weighted undirected graphs 
+# a program to generate weighted (nodes & edges) undirected graphs 
 # and also write these out in a format that is suitable for 
-# a TSP-problem formulated as an integer programming problem
-# in the SCIP-solver
+# different integer programming problems in the SCIP-solver
 
+class Edge
+  attr_accessor :to, :cost
+
+  def initialize(to, cost)
+    @to = to
+    @cost = cost
+  end
+end
 
 # probably a very non-Ruby class name
-class CompleteUndirectedWeightedGraph 
-  attr_accessor :n, :edges
+class UndirectedWeightedGraph 
+  attr_accessor :n, :edges, :cost
 
   def initialize(n)
     @n = n
-    @edges = Array.new(n) { |vertex| vertex = Array.new(n) { |cost| cost = 0  } }
+    @cost = Array.new(n)
+    @edges = Hash.new
+    (0...n).each do |v|
+      @edges[v] = {}
+    end
+  end
+
+  def cost(u,v)
+
+  end
+  
+  # returns true if there's an edge between u and v
+  def has_edge(u, v)
+    return true if @edges[u].has_key? v
+
+    false
+  end
+
+  # adds a bidirectional edge between u and v with cost c
+  def add_edge(u, v, c)
+    return if u >= n or v >= n
+
+    return if has_edge(u,v)
+
+    @edges[u].merge!({v => c})
+    @edges[v].merge!({u => c})
   end
 
   def update_edge(u, v, new_cost)
     return if u >= n or v >= n or new_cost < 0
-    
-    @edges[u][v] = new_cost
+    return if not has_edge(u,v)
+
   end
 
-  def print_integer_program
-    puts "minimize"
-    # objective function
-    (0...n).each do |i|
-      (0...n).each do |j|
-        next if i == j
-        puts "#{@edges[i][j]}*x#{i}#{j}"
-      end
-    end
-    puts "subject to"
-    # constraints
+  def num_edges
+    edges
+  end
 
+  def print_vertex_cover_ip
+    puts "minimize"
+
+    objective = ""
+    # sum of all used vertex costs
+    @cost.each_with_index do |cost_v,v|
+      objective += "#{cost_v}x#{v}"
+    end
+
+    puts "subject to"
+
+    # cover all edges
+    (0...n).each do |u|
+        puts "x#{u} + x#{} >= 1"
+    end
 
     puts "binary"
-    # variables
+    variables = ""
+    (0...n).each do |v|
+      print "x#{v} "
+    end
+    puts
   end
 end
 
@@ -43,39 +86,15 @@ def generate_graph_random_weights(n)
 end
 
 
-g = CompleteUndirectedWeightedGraph.new(5)
-g.update_edge(2,3,48)
-p g.edges
-g.print_integer_program
+g = UndirectedWeightedGraph.new(4)
+input = STDIN.readlines.map(&:strip)
+input.each_with_index do |line,i|
+  j = i + 1
+  line.split(" ").map(&:to_i).each do |c|
+    g.add_edge(i,j,c)
+    j += 1
+  end
+end
 
-
-
-# Turns out, none of this makes any sense for a complete graph,
-# Using Hash instead of Array is just wasteful when all nodes are 
-# connected to all others.
-
-#class Edge
-#  attr_accessor :to, :cost
-#
-#  def initialize(to, cost)
-#    @to = to
-#    @cost = cost
-#  end
-#end
-
-#  # returns true if there's an edge between u and v
-#  def has_edge(u, v)
-#    return true if edges[u].find { |edge| edge.to == v }
-#
-#    false
-#  end
-#
-#  # adds a bidirectional edge between u and v with cost c
-#  def add_edge(u, v, c)
-#    return if u >= n or v >= n
-#
-#    return if has_edge(u,v)
-#
-#    @edges[u] << Edge.new(v,c)
-#    @edges[v] << Edge.new(u,c)
-#  end
+p g.num_edges
+#g.print_vertex_cover_ip
