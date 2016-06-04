@@ -23,10 +23,6 @@ class UndirectedWeightedGraph
       @edges[v] = {}
     end
   end
-
-  def cost(u,v)
-
-  end
   
   # returns true if there's an edge between u and v
   def has_edge(u, v)
@@ -52,7 +48,7 @@ class UndirectedWeightedGraph
   end
 
   def num_edges
-    edges
+    edges.values.each.map(&:size).reduce(:+)/2
   end
 
   def print_vertex_cover_ip
