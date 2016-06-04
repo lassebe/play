@@ -11,43 +11,14 @@
 \begin{document}
 \maketitle
 
-I've chosen to look at the Traveling Salesperson Problem.
+I've chosen to look at a set of NP-Complete Graph Problems.
 
-Without loss of generality we will consider tours that begin and end in the first city.
+\begin{itemize}
+\item Vertex Cover
+\end{itemize}
+
 
 \section*{Integer Programming Formulation}
 
-Minimize
-
-\begin{equation} \label{eq:obj}
-  \sum_{i=1}^n \sum_{j=1}^n (c_{ij} x_{ij})
-\end{equation}
-
-Subject to
-
-% Path enters and leaves (symmetry) 
-\begin{equation} \label{eq:path_enter_leaves}
-  \sum_{j=1}^n (x_{ij}) = 2 \ \ 1\le i \le n
-\end{equation}
-
-% out-degrees
-\begin{equation} \label{eq:out_degree}
-  \sum_{j=1}^n (x_{ij}) = 1 \ \ 1\le i \le n
-\end{equation}
-
-% in-degrees
-\begin{equation} \label{eq:in_degree}
-  \sum_{i=1}^n (x_{ij}) = 1 \ \ 1\le j \le n
-\end{equation}
-
-% tour
-\begin{equation} \label{eq:tour}
-  t_i - t_j + nx_{ij} \le n-1 \ \ 1\le j \le n
-\end{equation}
-
-where $c_{ij} = c_{ji}$ is the cost of traveling from city $i$ to city $j$. $x_{ij}$ are binary variables that are $1$ if tour goes from city $i$ and then to city $j$. And $t_i$ are arbitrary real numbers we need to solve for.
-
-
-Equation ~\ref{eq:tour} ensures that the tour is a cycle that begins and ends in city $1$.
 
 \end{document}
