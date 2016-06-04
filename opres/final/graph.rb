@@ -3,9 +3,10 @@
 # different integer programming problems in the SCIP-solver
 
 class Edge
-  attr_accessor :to, :cost
+  attr_accessor :from, :to, :cost
 
-  def initialize(to, cost)
+  def initialize(from, to, cost)
+    @from = from
     @to = to
     @cost = cost
   end
@@ -51,6 +52,17 @@ class UndirectedWeightedGraph
     edges.values.each.map(&:size).reduce(:+)/2
   end
 
+  def each_edge
+    arr = []
+    edges.each do |u,neighbours|
+      neighbours.each do |v,cost|
+        next if u > v
+        arr << Edge.new(u,v,cost)
+      end
+    end
+    arr
+  end
+
   def print_vertex_cover_ip
     puts "minimize"
 
@@ -93,4 +105,7 @@ input.each_with_index do |line,i|
 end
 
 p g.num_edges
+g.each_edge.each do |e|
+  puts "(#{e.from},#{e.to}) cost #{e.cost}"
+end
 #g.print_vertex_cover_ip
