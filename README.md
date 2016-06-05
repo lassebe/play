@@ -26,8 +26,8 @@ Fun little exercise from some professors' homepage.
 ### Kattis
 A collection of Kattis problems.
 
-=== Opres
-For the UTokyo course on Operational Research. Assignments, and a larger final report. Final report investigates some larger combinatorial problem. Originally TSP, but I'll have to change that...
+### Opres
+For the UTokyo course on Operational Research. Assignments, and a larger final report. Final report investigates SCIPs performance on some NP-compete problems.
 
 ### PBA
 Physically Based Animation, for assignments in the UTokyo course.
