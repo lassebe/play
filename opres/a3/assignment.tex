@@ -1,0 +1,93 @@
+\documentclass[12pt]{report}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{parskip}
+\usepackage{graphicx}
+
+\title{Assignment 3}
+\author{Lasse Berglund : 48-159707}
+\date{\today}
+
+\begin{document}
+\maketitle
+\section*{Problem 1.}
+
+When applying the Simplex algorithm to the given LP we get the following tableaus:
+
+% Put calculations here
+
+Optimal solution = 
+Optimal value = 
+It took $ $ iterations
+
+
+\section*{Problem 2.}
+
+\section*{Problem 3.}
+
+\section*{Problem 4.}
+
+\subsection*{1.}
+
+We want to find the dual of the following LP problem.
+
+\textbf{Maximize}\\
+  $3x_1 + x_2$\\
+\textbf{subject to:}\\
+  $ x_1 + 2x_3 \le 4 $ \\
+  $ x_1 + x_2 + x_3\le 6 $ \\
+  $ x_1,x_2,x_3 \ge 0 $ \\
+
+Following the definition of the dual, we have:
+
+\textbf{Minimize}\\
+  $\textbf{y}^T \textbf{b} $\\
+\textbf{subject to:}\\
+  $ \textbf{y}^T A \ge \textbf{c}^T $ \\
+  $ \textbf{y} \ge 0 $ 
+
+where $A = \left(
+\begin{matrix}
+  1 & 0 & 2 \\
+  1 & 1 & 1 
+\end{matrix}
+\right),
+\quad 
+b = \left(
+\begin{matrix}
+  4 \\
+  6 
+\end{matrix}
+\right)
+\quad 
+y = \left(
+\begin{matrix}
+  y_1 & y_2  
+\end{matrix}
+\right) $ 
+
+Which gives us the following LP problem as the dual:
+
+\textbf{Minimize}\\
+  $ 4y_1 + 6y_2 $\\
+\textbf{subject to:}\\
+  $ y_1 + y_2  \ge 3 $ \\
+  $ y_2        \ge 1 $ \\
+  $ 2y_1 + y_2 \ge 0 $ 
+
+\subsection*{2.}
+
+When solving the original problem with SCIP we get the solution:
+$ x_1 = 4, x_2 = 2, obj = 12$
+and the dual
+$ y_1 = 3, y_2 = 0, obj = 12$
+
+As expected both problems yield the same optimal value.
+
+
+
+\section*{Problem 5.}
+
+\end{document}
