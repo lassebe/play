@@ -31,3 +31,6 @@ For the UTokyo course on Operational Research. Assignments, and a larger final r
 
 ### PBA
 Physically Based Animation, for assignments in the UTokyo course.
+
+### Revcomp
+For assignments in the short course on Reversible computation.
