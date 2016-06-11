@@ -152,8 +152,14 @@ In the backward direction I interpreted the statements as follows:
   \subsubsection*{a.}
     To simulate a COPY gate we can simply set the top control to 1, and use the same structure as we would with a Feynman gate.
 
-    \includegraphics{copy_gate.png}
+    \includegraphics[scale=0.8]{copy_gate.png}
   \subsubsection*{b.}
+    To simulate an XOR gate, I've ended up using 7 Toffoli gates, and ended up with 8 garbage bits. I'm fairly certain there's a more efficient way, but this is what I've got right now.
+
+    My idea was essentially to build up towards the expression
+    $$ a\oplus b = \neg ((a \land b) \land (\neg a \land \neg b))$$
+
+    \includegraphics[scale=0.4]{xor_gate.png}
   \subsubsection*{c.}
   \subsubsection*{d.}
 
