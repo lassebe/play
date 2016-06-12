@@ -152,15 +152,14 @@ In the backward direction I interpreted the statements as follows:
   \subsubsection*{a.}
     To simulate a COPY gate we can simply set the top control to 1, and use the same structure as we would with a Feynman gate.
 
-    \includegraphics[scale=0.8]{copy_gate.png}
+    \includegraphics[scale=0.5]{copy_gate.png}
   \subsubsection*{b.}
-    To simulate an XOR gate, I've ended up using 7 Toffoli gates, and ended up with 8 garbage bits. I'm fairly certain there's a more efficient way, but this is what I've got right now.
+    In order to simulate an XOR gate, we fix one of the controls to 1, the other to a, and set the controlled to b.
 
-    My idea was essentially to build up towards the expression
-    $$ a\oplus b = \neg ((a \land b) \land (\neg a \land \neg b))$$
-
-    \includegraphics[scale=0.4]{xor_gate.png}
+    \includegraphics[scale=0.5]{xor_gate.png}
   \subsubsection*{c.}
+    The classical way of synthesising an OR-gate given the building blocks we have so far would be to make use of the equivalence:
+    $$ a \lor b = \neg ( \neg a \land \neg b) $$
   \subsubsection*{d.}
 
 
