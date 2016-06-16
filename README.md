@@ -1,9 +1,9 @@
 Play
 ====
-A collection of things that don't fit anywhere else. 
+A collection of things that don't necessarily deserve their own repo. 
 
 ### Avalg
-Folder for the UTokyo Advanced Algorithms course. Currently only primality testing.
+For the UTokyo Advanced Algorithms course. Currently only primality testing. Might also contain some stuff on interactive proofs, or bioinformatics.
 
 ### Casting
 A solution to the extra-lab in ADK. Probably shouldn't be open to the public.
