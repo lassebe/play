@@ -14,7 +14,17 @@
 \maketitle
 \section*{Problem 1.}
 
-When applying the Simplex algorithm to the given LP we get the following tableaus:
+Before applying the Simplex algorithm to the given LP we need to write it in Standard Form, which means we need to add slack variables to change the inequalities to strict equality signs:
+
+\begin{tabular}{ l l l l l }
+  0 & + 100$x_1$ & + 10$x_2$ & + $x_3$ \\  \hline
+
+  $x_4$ = & 1 & - $x_1$ \\ 
+  $x_5$ = & 100 & $-20x_1$ & $- x_2$ \\ 
+  $x_6$ = & 1000 & $-200x_1$ & $-20x_2$ & $-x_3$ \\ 
+
+
+\end{tabular}
 
 % Put calculations here
 
