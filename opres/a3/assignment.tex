@@ -17,33 +17,86 @@
 Before applying the Simplex algorithm to the given LP we need to write it in Standard Form, which means we need to add slack variables to change the inequalities to strict equality signs:
 
 \begin{tabular}{ l l l l l }
-  0 & + 100$x_1$ & + 10$x_2$ & + $x_3$ \\  \hline
+  0 & $+ 100x_1$ & $+ 10x_2$ & + $x_3$ \\  \hline
 
   $x_4$ = & 1 & $-x_1$ \\ 
   $x_5$ = & 100 & $-20x_1$ & $- x_2$ \\ 
   $x_6$ = & 10000 & $-200x_1$ & $-20x_2$ & $-x_3$ \\ 
 
   \\
-
-  100 & + 10$x_2$ & + $x_3$ & $-100x_4$\\  \hline
+  % x1 -> 1
+  100 & $+ 10x_2$ & + $x_3$ & $-100x_4$\\  \hline
 
   $x_1$ = & 1 &  $-x_4$ \\ 
   $x_5$ = & 80  & $- x_2$ & $-20x_4$ \\ 
   $x_6$ = & 9800  & $-20x_2$ & $-x_3$ & $-200x_4$ \\ 
 
 
+  \\
+  % x2 -> 20
+  900 & $+ 100x_4$ & + $x_3$ & $-10x_5$\\  \hline
+
+  $x_1$ = & 1 &  $-x_4$ \\ 
+  $x_2$ = & 80  & $- x_5$ & $+20x_4$ \\ 
+  $x_6$ = & 8200  & $-x_3$ & $-200x_4$ & $+20x_5$ \\ 
+
+  \\
+  % x4 -> 1
+  1000 & $+x_3$ & $-100x_1$ & $-10x_5$ \\  \hline
+
+  $x_4$ = & 1 &  $-x_1$ \\ 
+  $x_2$ = & 100 & $- x_5$ & $-20x_1$ \\ 
+  $x_6$ = & 8000  & $-x_3$ & $+200x_1$ & $+20x_5$ \\ 
+  
+  \\
+  % x3 -> 8000
+  9000 & $+100x_1$ & $+10x_5$ & $-x_6$ \\  \hline
+
+  $x_4$ = & 1 &  $-x_1$ \\ 
+  $x_2$ = & 100 & $- x_5$ & $-20x_1$ \\ 
+  $x_3$ = & 8000  & $+200x_1$ & $+20x_5$ & $-x_6$  \\ 
+
+  \\
+  % x1 -> 100
+  9100 & $+10x_5$ & $-x_6$ & $-100x_4$  \\  \hline
+
+  $x_1$ = & 1 &  $-x_4$ \\ 
+  $x_2$ = & 80 & $- x_5$ & $+20x_4$ \\ 
+  $x_3$ = & 8200  & $-200x_4$ & $+20x_5$ & $-x_6$  \\ 
+
+  \\
+  % x5 -> 80
+  9900 & $+100x_4$ & $-10x_2$ & $-x_6$  \\  \hline
+
+  $x_1$ = & 1 &  $-x_4$ \\ 
+  $x_5$ = & 80 & $- x_2$ & $+20x_4$ \\ 
+  $x_3$ = & 9800  & $+200x_4$ & $-20x_2$ & $-x_6$  \\ 
+
+  \\
+  % x1 -> 1
+  10000 & $-100x_1$ & $-10x_2$ & $-x_6$   \\  \hline
+
+  $x_4$ = & 1 &  $-x_1$ \\ 
+  $x_5$ = & 100 & $- x_2$ & $-20x_1$ \\ 
+  $x_3$ = & 10000  & $-200x_1$ & $-20x_2$ & $-x_6$  \\ 
+
 \end{tabular}
 
-% Put calculations here
 
-Optimal solution = 
-Optimal value = 
-It took $ $ iterations
+Optimal solution is $\{ x_1 = 0, x_2 = 0, x_3 = 10000 \}$\\
+Optimal value = $10000$ \\
+It took $7$ iterations
 
 
 \section*{Problem 2.}
 
 \includegraphics{figure.pdf}
+
+When applying the Simplex method we move from the origin $(0,0,0)$, to $(1,0,0)$.
+Then to $(1,80,0)$, then to $(0,100,0)$, then up to $(0,100,8200)$, over to $(0,80,8000)$.
+Then to $(1,80,8200)$, followed by $(1,0,9800)$, and finally $(0,0,10000)$. \\
+
+In other words, we move from the far lower left corner, counter-clockwise around the base, then up
 
 \section*{Problem 3.}
 
