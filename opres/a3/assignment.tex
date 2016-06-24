@@ -14,8 +14,13 @@
 \maketitle
 \section*{Problem 1.}
 
-Before applying the Simplex algorithm to the given LP we need to write it in Standard Form, which means we need to add slack variables to change the inequalities to strict equality signs:
+Before applying the Simplex algorithm to the given LP we need to write it in Standard Form, which means we need to add slack variables to change the inequalities to strict equality signs.
 
+The optimal solution is $\{ x_1 = 0, x_2 = 0, x_3 = 10000 \}$ which gives an optimal value of $10000$. It took $7$ iterations, the tableaux follow on the next page.
+
+
+\begin{table}
+\begin{center}
 \begin{tabular}{ l l l l l }
   0 & $+ 100x_1$ & $+ 10x_2$ & + $x_3$ \\  \hline
 
@@ -81,12 +86,11 @@ Before applying the Simplex algorithm to the given LP we need to write it in Sta
   $x_3$ = & 10000  & $-200x_1$ & $-20x_2$ & $-x_6$  \\ 
 
 \end{tabular}
+\end{center}
+\end{table}
 
 
-Optimal solution is $\{ x_1 = 0, x_2 = 0, x_3 = 10000 \}$\\
-Optimal value = $10000$ \\
-It took $7$ iterations
-
+\newpage
 
 \section*{Problem 2.}
 
@@ -100,11 +104,11 @@ In other words, we move from the far lower left corner, counter-clockwise around
 
 \section*{Problem 3.}
 
-Presumably the addition of another variable extends the feasibility region to a four dimensional object, with 
+Presumably the addition of another variable extends the feasibility region to a four dimensional object, with $16$ basic solutions. If we think of the similar situation with two variables $x_1,x_2$ it takes three iterations. With three variables it takes seven iterations. Following this pattern, we should expect to have to run Simplex for $15$ rounds. In general, if we follow the pattern of these problems we should expect to have to run $2^k-1$ iterations of the Simplex method, where $k$ is the number of variables.
 
 \section*{Problem 4.}
 
-\subsection*{1.}
+\subsection*{1. Finding the dual}
 
 We want to find the dual of the following LP problem.
 
@@ -123,25 +127,29 @@ Following the definition of the dual, we have:
   $ \textbf{y}^T A \ge \textbf{c}^T $ \\
   $ \textbf{y} \ge 0 $ 
 
-where $A = \left(
-\begin{matrix}
+where $A =
+\begin{bmatrix}
   1 & 0 & 2 \\
   1 & 1 & 1 
-\end{matrix}
-\right),
+\end{bmatrix}
 \quad 
-b = \left(
-\begin{matrix}
+$
+
+$
+b =
+\begin{bmatrix}
   4 \\
   6 
-\end{matrix}
-\right)
+\end{bmatrix}
 \quad 
-y = \left(
-\begin{matrix}
+$
+
+$
+y =
+\begin{bmatrix}
   y_1 & y_2  
-\end{matrix}
-\right) $ 
+\end{bmatrix}
+$ 
 
 Which gives us the following LP problem as the dual:
 
@@ -152,7 +160,7 @@ Which gives us the following LP problem as the dual:
   $ y_2        \ge 1 $ \\
   $ 2y_1 + y_2 \ge 0 $ 
 
-\subsection*{2.}
+\subsection*{2. Running with SCIP}
 
 When solving the original problem with SCIP we get the solution:
 $ x_1 = 4, x_2 = 2, obj = 12$
@@ -164,5 +172,44 @@ As expected both problems yield the same optimal value.
 
 
 \section*{Problem 5.}
+\subsection*{1. Transform LP to Matrix Form}
+Minimize:
+$
+\begin{bmatrix}
+  5x_1 \\
+  7x_2 \\
+  12x_3
+\end{bmatrix}
+$\\
+Subject to:
+$
+\begin{bmatrix}
+  0 & 1 & 12 \\
+  1 & 1 & 1 
+\end{bmatrix}
+$
+$
+\begin{bmatrix}
+  x_1 \\
+  x_2 \\
+  x_3
+\end{bmatrix}
+$
+$
+\ge
+\begin{bmatrix}
+  3 \\
+  2
+\end{bmatrix}
+$
+
+\subsection*{2. Determine the Dual}
+Maximize $ \textbf{b}^T \textbf{y}$\\
+subject to: $ \textbf{A}^T \textbf{y} \le \textbf{c}$\\
+Where $\textbf{y}=[y_1,y_2]^T$.
+
+
+\subsection*{1. Solve the Dual graphically}
+
 
 \end{document}
