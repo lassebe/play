@@ -173,18 +173,25 @@ As expected both problems yield the same optimal value.
 
 \section*{Problem 5.}
 \subsection*{1. Transform LP to Matrix Form}
-Minimize:
+Minimize: \\
+$
+(\textbf{b} = )
+\begin{bmatrix}
+  5 & 7 & 12
+\end{bmatrix}
+$
 $
 \begin{bmatrix}
-  5x_1 \\
-  7x_2 \\
-  12x_3
+  x_1 \\
+  x_2 \\
+  x_3
 \end{bmatrix}
 $\\
+
 Subject to:
 $
 \begin{bmatrix}
-  0 & 1 & 12 \\
+  0 & 1 & 2 \\
   1 & 1 & 1 
 \end{bmatrix}
 $
@@ -197,6 +204,7 @@ $
 $
 $
 \ge
+( \textbf{c} = )
 \begin{bmatrix}
   3 \\
   2
@@ -204,12 +212,25 @@ $
 $
 
 \subsection*{2. Determine the Dual}
-Maximize $ \textbf{b}^T \textbf{y}$\\
-subject to: $ \textbf{A}^T \textbf{y} \le \textbf{c}$\\
+Using the same procedure as in Problem 2 above, backwards we have that the Dual is:
+
+Maximize $ \textbf{c}^T \textbf{y}$\\
+subject to: $ \textbf{A}^T \textbf{y} \le \textbf{b}$\\
 Where $\textbf{y}=[y_1,y_2]^T$.
 
+Or in other words.
 
-\subsection*{1. Solve the Dual graphically}
+Maximize $ 3y_1 + 2y_2$\\
+subject to: \\
+$ 
+  y2        \le 5\\
+  y1 + y2   \le 7\\
+  2y1 + y2 \le 12 $\\
 
+
+\subsection*{3. Solve the Dual graphically}
+
+\includegraphics[scale=0.5]{dual_plot}\\
+Using the plot above we can see that the optimal solution is $y_1 = 2, y_2 = 5$ which gives an optimal value of $19$.
 
 \end{document}
