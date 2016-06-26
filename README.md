@@ -4,7 +4,7 @@ A collection of things that don't necessarily deserve their own repo.
 Including miscellaneous Kattis problems, UTokyo and Coursera assignments, etc.
 
 ### Avalg
-For the UTokyo Advanced Algorithms course. Currently only primality testing. Might also contain some stuff on interactive proofs, or bioinformatics.
+For the UTokyo Advanced Algorithms course. Currently only primality testing. Might also contain some stuff on interactive proofs, or string algorithms.
 
 ### Casting
 A solution to the extra-lab in ADK. Probably shouldn't be open to the public.
