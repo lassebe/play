@@ -161,12 +161,14 @@ In the backward direction I interpreted the statements as follows:
     The classical way of synthesising an OR-gate given the building blocks we have so far would be to make use of one of DeMorgan's Law:
     $$ a \lor b = \neg ( \neg a \land \neg b) $$
 
-    This results in the following combination of four Toffoli gates and 6 garbage bits.
+    This results in the following combination of four Toffoli gates and six garbage bits.
 
     \includegraphics[scale=0.5]{or_gate.png}
 
   \subsubsection*{d.}
-    I can't prove that it is impossible, but I'm unable to find a way.
+    After looking around for a bit I found a way of doing it with only three gates by doing the conjuction and negation in the same step.
+
+    \includegraphics[scale=0.5]{smart_or.png}
 
 \subsection*{2.}
   \subsubsection*{a.}
