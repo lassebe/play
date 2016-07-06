@@ -1,0 +1,84 @@
+\documentclass[12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+\usepackage{graphicx}
+
+\title{Assignment 4}
+\author{Lasse Berglund : 48-159707}
+\date{\today}
+
+\begin{document}
+\maketitle
+\section*{1. Branch and Bound}
+  When using the branch-and-bound method, in the ordering $x_3,x_2,x_1$, I got this result.
+
+  \includegraphics[scale=0.5]{branch_and_bound.png}
+
+  The red triangles are subtrees pruned because they break the weight constraint, and the yellow triangles are pruned because they can't contain a solution with a better value than the one we've found so far.
+
+  The yellow circle is the initial solution that's found, which is later replaced by the optimal solution $(1,1,0)$.
+
+  Using the following SCIP-program, I got the same result, as expected.
+
+  \begin{verbatim}
+  maximize
+    10x1 + 14x2 + 21x3
+  subject to
+    2x1 + 3x2 + 6x3 <= 7
+  binary
+    x1 x2 x3
+  \end{verbatim}
+
+
+\section*{2. Knapsack Relaxation}
+  \subsection*{(a)}
+    In the LP relaxation we consider the problem with the integer constraint removed.
+
+    In this case we can find an optimal solution using the greedy heuristic shown in earlier assignments, since the variables can take fractional values. That is, we sort the items by their value per weight ratio, and pick as much as we can of each item in this ordering. In the assignment the values are already ordered by their ratios, so we easily find the solution.
+
+    $(1,1,1,0.286,0,0)$ for an optimal value of $10+13+10+(16/7)*0.286 = 37.57$. 
+  
+  \subsection*{(b)}
+    When using branch-and-bound, we get the following search tree.
+
+    \includegraphics[scale=0.5]{bandb2.png}
+
+    As before red triangles are subtrees pruned because they break the weight constraint, and the yellow triangles are pruned because they can't contain a solution with a better value than the one we've found so far.
+
+    The yellow circles is suboptimal solutions and the green is the optimal solution $(1,0,1,1,0,0)$.
+
+
+
+  \subsection*{(c)}
+    \begin{verbatim}
+      maximize
+        10x1 + 13x2 + 10x3 + 16x4 + 2x5 + 3x6
+      subject to
+        3x1 + 5x2 + 4x3 + 7x4 + 2x5 + 4x6 <= 14
+      binary
+        x1 x2 x3 x4 x5 x6
+    \end{verbatim}
+
+    Running this program with SCIP gives the same solution as when using branch-and-bound.
+\section*{3}
+For this exercise I will just give the values $(a),(b), \ldots , (g)$.
+
+$(a)$: Suppose an item $x_k$ had a weight $s_k$ such that $s_k > B$. This item could never fit in the knapsack, and could therefore be excluded from the problem entirely, without affecting the solution.
+
+$(b)$: $\ge$
+
+$(c)$: $=$
+
+$(d)$: $0$
+
+$(e)$: $=$
+
+$(f)$: $\sum_{i=1}^n w_i \bar{x}_i$
+
+$(g)$: $\sum_{i=1}^n w_i y_i$
+
+
+
+
+\end{document}
