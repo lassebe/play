@@ -7,11 +7,38 @@
 \usepackage{parskip}
 \usepackage{graphicx}
 
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
 \title{Report}
 \author{Lasse Berglund : 48-159707}
 \date{\today}
 
 \begin{document}
 \maketitle
+
+\section*{A naive randomized primality testing algorithm}
+
+In the lecture we discussed the following algorithm.
+
+
+\begin{algorithmic}
+  \Function{isPrime}{$n \in \mathcal{N}$}
+    \State Choose $a \in [1,n-1]$ uniformally at random
+    \If{$gcd(a,n) > 1$}
+      \State output ''composite''
+    \Else
+      \If{$a^{n-1} = 1 \ (mod \ n)$}
+        \State output ''prime''
+      \Else
+        \State output ''composite''
+      \EndIf
+    \EndIf
+  \EndFunction
+\end{algorithmic}
+
+As this algorithm is randomized, it can make errors, in this case, it might state that a number is prime, even though it is in fact composite. This can be mediated by running the algorithm several times to decrease the probability of misidentification. However, it has a critical flaw. In the second if-statement, it tests whether $a^{n-1} = 1 \ (mod \ n)$, now this property holds for any $a \in [1,n-1]$ if $n$ is prime. But it also holds for composite numbers known as Carmichael numbers, indeed the definition of a Carmichael number is that it has this property. This means that no matter how many times we run the algorithm, it will always incorrectly identify a given Carmichael number as prime.
+
+In order to overcome this fatal flaw, we look to one of the canonical primality testing algorithms in the literature, the one proposed by Rabin and Miller.
 
 \end{document}
