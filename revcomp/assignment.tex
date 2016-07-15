@@ -7,7 +7,7 @@
 \usepackage{parskip}
 \usepackage{graphicx}
 
-\title{Assignment}
+\title{Assignments for Special Lecture in Informatics VII}
 \author{Lasse Berglund : 48-159707}
 \date{\today}
 
@@ -24,11 +24,10 @@
   In order to define a trivial inverse interpreter, given a program inverter, we take the given program $p$, we feed it into the program inverter and get the inverse program $p^{-1}$. Then we simply run $p^{-1}$ with a normal interpreter on the output $y$.
 
 
-  In lambda calculus: $\lambda p. \lambda y. [Int] ( [ProgInv] \ p ) \ y)$.
+  In lambda calculus: $\lambda p. \lambda y. ( [Int] ( [ProgInv] \ p ) \ y)$.
 
 
 \section*{Reversible Programming}
-The Janus program that 
 \begin{verbatim}
 n x1 x2
 
@@ -46,7 +45,7 @@ procedure main_fwd
   call fib
 
 
-procedure main_fwd
+procedure main_bwd
   x1 += 4
   x2 += 8
   uncall fib
@@ -54,9 +53,13 @@ procedure main_fwd
 \end{verbatim}
 
 
-\subsection*{3.} 
+
+\subsection*{3. Forward execution} 
+When running the program main\_fwd, we get the following trace:
+
 $ \{x1=0$, $x2=0$, $n=0 \} $ \\
   \textbf{ n += 4 }\\
+  \textbf{ call fib }\\
 $ \{x1=0$, $x2=0$, $n=4 \} $ \\
   \textbf{else n -= 1} \\
 $ \{x1=0$, $x2=0$, $n=3 \} $ \\
@@ -91,90 +94,334 @@ $ \{x1=3$, $x2=5$, $n=0 \} $ \\
   \textbf{fi x1=x2} \\
 $ \{x1=5$, $x2=8$, $n=0 \} $ \\
 
-\subsection*{4.}
-For readability I changed the addition statements to subtraction and vice-versa.
+\subsection*{4. Backward execution}
+When we run the program main\_bwd we get the following trace.
 
-
+$ \{x1=0$, $x2=0$, $n=0 \} $ \\
+\textbf{ x1 += 5 } \\
+\textbf{ x2 += 8 } \\
+\textbf{ uncall fib } \\
 $ \{x1=5$, $x2=8$, $n=0 \} $ \\
-\textbf{fi x1=x2} \\
-\textbf{x1 <=> x2} \\
+\textbf{if x1=x2} \\
+\textbf{else x1 <=> x2} \\
 \textbf{x1 -= x2} \\
 \textbf{uncall fib} \\
 $ \{x1=3$, $x2=5$, $n=0 \} $ \\
-\textbf{fi x1=x2} \\
-\textbf{x1 <=> x2} \\
+\textbf{if x1=x2} \\
+\textbf{else x1 <=> x2} \\
 \textbf{x1 -= x2} \\
 \textbf{uncall fib} \\
 $ \{x1=2$, $x2=3$, $n=0 \} $ \\
-\textbf{fi x1=x2} \\
-\textbf{x1 <=> x2} \\
+\textbf{if x1=x2} \\
+\textbf{else x1 <=> x2} \\
 \textbf{x1 -= x2} \\
 \textbf{uncall fib} \\
 $ \{x1=1$, $x2=2$, $n=0 \} $ \\
-\textbf{fi x1=x2} \\
-\textbf{x1 <=> x2} \\
+\textbf{if x1=x2} \\
+\textbf{else x1 <=> x2} \\
 \textbf{x1 -= x2} \\
 \textbf{uncall fib} \\
 $ \{x1=1$, $x2=1$, $n=0 \} $ \\
-\textbf{fi x1=x2} \\
-\textbf{x2 -= 1} \\
-\textbf{if n=0 then x1 -= 1} \\
+\textbf{if x1=x2} \\
+\textbf{then x2 -= 1} \\
+\textbf{x1 -= 1} \\
+\textbf{fi n=0} \\
 $ \{x1=0$, $x2=0$, $n=0 \} $ \\
-\textbf{else n += 1} \\
+\textbf{n += 1} \\
+\textbf{ fi n=0 } \\
 $ \{x1=0$, $x2=0$, $n=1 \} $ \\
-\textbf{else n += 1} \\
+\textbf{ n += 1} \\
+\textbf{ fi n=0 } \\
 $ \{x1=0$, $x2=0$, $n=2 \} $ \\
-\textbf{else n += 1} \\
+\textbf{ n += 1} \\
+\textbf{ fi n=0 } \\
 $ \{x1=0$, $x2=0$, $n=3 \} $ \\
-\textbf{else n += 1} \\
+\textbf{ n += 1} \\
+\textbf{ fi n=0 } \\
 $ \{x1=0$, $x2=0$, $n=4 \} $ \\
 
 
-\subsection*{5.}
+\subsection*{5. Interpretation}
 In the forward direction I interpreted the statements as follows:
 \begin{itemize}
-\item \textbf{ x += n } Add $n$ to the variable x.
+\item \textbf{ x += n } Add $n$ to the variable $x$.
 \item \textbf{ x1 <=> x2 } Swap the values of x1 and x2.
 \item \textbf{ if cond } If the boolean condition is true, execute the then branch, otherwise execute the else branch.
-\item \textbf{ call prod } Execute the procedure prod.
+\item \textbf{ call prod } Execute the procedure prod in the forward direction.
+
+\item \textbf{ fi cond } If the boolean condition is true, execution came from the then-branch, otherwise it came through the else-branch.
 \end{itemize}
 
 In the backward direction I interpreted the statements as follows:
 \begin{itemize}
-\item \textbf{ x += n } Subtract $n$ to the variable x.
+\item \textbf{ x += n } Subtract $n$ from the variable $x$.
 \item \textbf{ x1 <=> x2 } Swap the values of x1 and x2. (Unchanged)
-\item \textbf{ fi cond } If the boolean condition is true, execute the then branch backwards, otherwise execute the else branch backwards.
+\item \textbf{ if cond } Becomes fi, while fi becomes if.
 \item \textbf{ uncall prod } Execute the procedure prod backwards.
 \end{itemize}
 
 \section*{Reversible gates}
-\subsection*{1.}
-  \subsubsection*{a.}
+\subsection*{1. Gates}
+  \subsubsection*{a. COPY gate}
     To simulate a COPY gate we can simply set the top control to 1, and use the same structure as we would with a Feynman gate.
 
     \includegraphics[scale=0.5]{copy_gate.png}
-  \subsubsection*{b.}
+  \subsubsection*{b. XOR gate}
     In order to simulate an XOR gate, we fix one of the controls to 1, the other to a, and set the controlled to b.
 
     \includegraphics[scale=0.5]{xor_gate.png}
-  \subsubsection*{c.}
+  \subsubsection*{c. OR gate }
     The classical way of synthesising an OR-gate given the building blocks we have so far would be to make use of one of DeMorgan's Law:
     $$ a \lor b = \neg ( \neg a \land \neg b) $$
 
-    This results in the following combination of four Toffoli gates and six garbage bits.
+    This results in the following combination of four Toffoli gates and two non-constant, non-input garbage bits.
 
     \includegraphics[scale=0.5]{or_gate.png}
 
-  \subsubsection*{d.}
+  \subsubsection*{d. Optimal construction}
     After looking around for a bit I found a way of doing it with only three gates by doing the conjuction and negation in the same step.
 
     \includegraphics[scale=0.5]{smart_or.png}
 
-\subsection*{2.}
-  \subsubsection*{a.}
+\subsection*{2. Adder}
+  \subsubsection*{a. Adder with garbage bits}
+    To create a full-adder using Toffoli gates, I simply used the classical logic construction shown below.
+
+    \includegraphics[scale=0.5]{classic_adder.jpg}
+
+    This lead to the construction on the following page, using 7 gates, producing the output (sum, and carry out), three garbage bits (or four if you count the input $a$).
+
+    \includegraphics[angle=270,origin=c,scale=0.5]{full_adder.png}
+
+  \subsubsection*{b. Removing garbage bits}
+    In order to make a fully reversible full-adder out of Toffoli gate we could "simply" take the construction in a, copy the output bits, and then feed all the lines from the machine in $a$ to the inverse machine to reproduce the original input. In order to save some time I've omitted the diagram, I hope that is okay. :)
+
+
+\section*{Turing Machines}
+  \subsection*{1. Standard Turing Machine}
+    A simple standard one-tape Turing machine $\mathcal{M}$ that solves unary addition, starting from an initial state $S$ could look as follows.
+
+  \begin{equation}
+      S,b \rightarrow  b, +, A_1  \label{eq:rule_1}
+    \end{equation}
+
+    \begin{equation}
+      A_1,1 \rightarrow  1, +, A_1  \label{eq:rule_2}
+    \end{equation}
+    \begin{equation}
+      A_1,\$ \rightarrow  1, +, A_1  \label{eq:rule_3}
+    \end{equation}
+    \begin{equation}
+      A_1,b \rightarrow  b, -, A_2  \label{eq:rule_4}
+    \end{equation}
     
+    \begin{equation}
+      A_2,1 \rightarrow  b, -, A_3  \label{eq:rule_5}
+    \end{equation}
 
-  \subsubsection*{b.}
+    \begin{equation}
+      A_3,1 \rightarrow  1, -, A_3  \label{eq:rule_6}
+    \end{equation}
+    \begin{equation}
+      A_3,b \rightarrow  b, 0, F  \label{eq:rule_7}
+    \end{equation}
 
 
+    The intuition can be described as follows, from the initial state we go to $A_1$, where we traverse the tape until we hit the end of the first unary number, marked by the \$, we change that to a one, and keep going right until we hit the end of the second number. At which point we shift to state $A_3$. In $A_3$ we remove the extra $1$ from the right end of the tape and then go back to the initial tape position  and enter the final state $F$.
+
+
+  \subsection*{2. Reverisble?}
+    My construction is not reversible. Rules \ref{eq:rule_1} and \ref{eq:rule_2} break reversibility because they overlap in their domains ($1,+,A_1$). On the other hand, it is what Bennet defines as a standard Turing Machine, as it is deterministic, if it halsts, it halts in a control state, and it has control states $S$ and $F$.
+
+  \subsection*{3. Bennet's Trick}
+    \subsubsection*{a. Quintuple to quadruple}
+      We start by splitting our previous rules as follows:
+
+      \begin{equation}
+        S,[b\ /\ b] \rightarrow [b\ +\ b], S^{\prime} \label{eq:rule_1_1}
+      \end{equation}
+      \begin{equation}
+        S^{\prime},[/\ b\ /] \rightarrow [+\ 1\ 0], A_1 \label{eq:rule_1_2}
+      \end{equation}
+
+      % A1
+      \begin{equation}
+        A_1 [1\ /\ b], \rightarrow  [1\ +\ b], A_a  \label{eq:rule_2_1}
+      \end{equation}
+      \begin{equation}
+        A_a [/\ b\ /], \rightarrow  [+\ 2\ 0], A_1  \label{eq:rule_2_2}
+      \end{equation}
+
+      \begin{equation}
+        A_1 [\$\ /\ b], \rightarrow  [1\ +\ b], A_b  \label{eq:rule_3_1}
+      \end{equation}
+      \begin{equation}
+        A_b [/\ b\ /], \rightarrow  [+\ 3\ 0], A_1  \label{eq:rule_3_2}
+      \end{equation}
+
+      \begin{equation}
+        A_1 [b\ /\ b], \rightarrow  [b\ +\ b], A_c  \label{eq:rule_3_1}
+      \end{equation}
+      \begin{equation}
+        A_c [/\ b\ /], \rightarrow  [-\ 4\ 0], A_2  \label{eq:rule_3_2}
+      \end{equation}
+
+
+      % A2
+      \begin{equation}
+        A_2 [1\ /\ b], \rightarrow  [b\ +\ b], A_d  \label{eq:rule_4_1}
+      \end{equation}
+      \begin{equation}
+        A_d [/\ b\ /], \rightarrow  [-\ 5\ 0], A_2  \label{eq:rule_4_2}
+      \end{equation}
+
+
+
+      % A3
+      \begin{equation}
+        A_3 [1\ /\ b], \rightarrow  [1\ +\ b], A_e  \label{eq:rule_8_1}
+      \end{equation}
+      \begin{equation}
+        A_e [/\ b\ /], \rightarrow  [-\ 6\ 0], A_3  \label{eq:rule_8_2}
+      \end{equation}
+
+      \begin{equation}
+        A_3 [b\ /\ b], \rightarrow  [b\ +\ b], A_f  \label{eq:rule_9_1}
+      \end{equation}
+      \begin{equation}
+        A_f [/\ b\ /], \rightarrow  [0\ 7\ 0], A_F  \label{eq:rule_9_2}
+      \end{equation}
+
+    After that we copy the output from the first tape to the third tape. First we "enter the new set of rules" $B$. After that we alternate between shifting right, and copying the non-blank symbol on the tape. When we hit the right blank, we roll the heads back and enter the final stage of the computation. Like in Bennet, we summarise all non-blank symbol copies within brackets, as they have the same format.
+
+      \begin{equation}
+        A_F [b\ N\ b], \rightarrow  [b\ 7\ b], B_a  \label{eq:rule_B_S}
+      \end{equation}
+      \begin{equation}
+        B_a [/\ /\ /], \rightarrow  [+\ 0\ +], B_1  \label{eq:rule_B_A}
+      \end{equation}
+      \begin{equation} 
+      x \neq b \ \{ \
+        B_1 [x\ N\ b], \rightarrow  [x\ 7\ x], B_a  \} \label{eq:rule_B_1}
+     \ \}
+      \end{equation}
+      \begin{equation}
+        B_1 [b\ N\ b], \rightarrow  [b\ 7\ b], B_b  \label{eq:rule_B_1_2}
+      \end{equation}
+      \begin{equation}
+        B_b [/\ /\ /], \rightarrow  [-\ 0\ -], B_2  \label{eq:rule_B_B}
+      \end{equation}
+      \begin{equation} 
+      x \neq b \ \{ \
+        B_2 [x\ N\ x], \rightarrow  [x\ 7\ x], B_b  \} \label{eq:rule_B_2}
+     \ \}
+      \end{equation}
+      \begin{equation}
+        B_2 [b\ N\ b], \rightarrow  [b\ 9\ b], C_F  \label{eq:rule_B_2_2}
+      \end{equation}
+      
+    In the final set of rules we trace the history tape, and uncompute the output on the first tape.
+
+
+      \begin{equation}
+        C_F [/\ 7\ /] \rightarrow  [0\ b\ 0], C_f \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C_h [b\ /\ b] \rightarrow  [b\ -\ b], C_3  \label{eq:rule_C3prime}
+      \end{equation}
+
+      \begin{equation}
+        C_3 [/\ 6\ /] \rightarrow  [+\ b\ 0], C_e  \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C_e [1\ /\ b] \rightarrow  [1\ -\ b], C_3  \label{eq:rule_C_F}
+      \end{equation}
+
+      \begin{equation}
+        C_3 [/\ 5\ /] \rightarrow  [+\ b\ 0], C_d  \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C_d [b\ /\ b] \rightarrow  [1\ -\ b], C_2  \label{eq:rule_C_F}
+      \end{equation}
+
+      \begin{equation}
+        C_2 [/\ 4\ /] \rightarrow  [+\ b\ 0], C_c  \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C_c [b\ /\ b] \rightarrow  [b\ -\ b], C_1  \label{eq:rule_C_F}
+      \end{equation}
+      
+      \begin{equation}
+        C_1 [/\ 3\ /] \rightarrow  [-\ b\ 0], C_b  \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C_b [1\ /\ b] \rightarrow  [\$\ -\ b], C_1  \label{eq:rule_C_F}
+      \end{equation}
+
+      \begin{equation}
+        C_1 [/\ 2\ /] \rightarrow  [-\ b\ 0], C_a  \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C_a [1\ /\ b] \rightarrow  [1\ -\ b], C_1  \label{eq:rule_C_F1}
+      \end{equation}
+
+      \begin{equation}
+        C_1 [/\ 1\ /] \rightarrow  [-\ b\ 0], C^{\prime}  \label{eq:rule_C_F}
+      \end{equation}
+      \begin{equation}
+        C^{\prime} [b\ /\ b], \rightarrow  [b\ -\ b], C_0  \label{eq:rule_C_F1}
+      \end{equation}
+
+    \subsubsection*{b. Reversible?}
+      This construction is reversible, as the splitting of the transitions in $A$ ensures that the rules are free from overlap in their ranges. The copying part is clearly reversible. And the reversibility of the uncomputing follows from the same of the rules in $A$.
+
+    \subsubsection*{c. Trace}
+      I've omitted large parts of the trace at it would take up a quite ridiculous amount of space. I hope that's okay. :)
+      \includegraphics[scale=0.5]{compute.png}\\
+      \includegraphics[scale=0.5]{copy.png}\\
+      \includegraphics[scale=0.5]{uncompute.png}
+
+\section*{Reversible Programming}
+  \subsection*{1. Implementation}
+    \subsubsection*{a. Free-falling simulation}
+      My implementation looks as follows.
+    \begin{verbatim}
+procedure fall(int t, int v, int h, int t_end)
+  from t = 0
+  do
+    t += 1
+    v += 10
+    h -= v 
+    h += 5
+  until t = t_end
+
+procedure main()
+  int t
+  int v
+  int h
+  int t_end
+  h += 176
+  t_end += 3
+  call fall(t,v,h,t_end)
+    \end{verbatim}
+    \subsubsection*{b. Trace}
+      $h = 176, t = 0, v = 0, t\_end = 3$
+
+      $h = 171, t = 1, v = 10, t\_end = 3$
+
+      $h = 156, t = 2, v = 20, t\_end = 3$
+
+      $h = 131, t = 3, v = 30, t\_end = 3$
+
+  \subsection*{2. Inverse Problem}
+    For the reverse program we simply set up the variables, and uncall the fall-procedure as follows.
+    \begin{verbatim}
+procedure backwards()
+  t += 4
+  t_end += 4
+  v += 40
+  uncall fall(t,v,h,t_end)
+    \end{verbatim}
+    This produces the store:
+    $t=0, v=0, h=80,t\_end=4$
 \end{document}
