@@ -4,11 +4,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
-\usepackage{parskip}
 \usepackage{graphicx}
+\usepackage[square,numbers]{natbib}
+\usepackage{parskip}
+\usepackage{hyperref}
 
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
+
 
 \title{Report}
 \author{Lasse Berglund : 48-159707}
@@ -19,7 +22,7 @@
 
 \section*{A naive randomized primality testing algorithm}
 
-In the lecture we discussed the following algorithm.
+In the lecture we discussed the following algorithm, known as Fermat's Primality Test.
 
 
 \begin{algorithmic}
@@ -39,6 +42,70 @@ In the lecture we discussed the following algorithm.
 
 As this algorithm is randomized, it can make errors, in this case, it might state that a number is prime, even though it is in fact composite. This can be mediated by running the algorithm several times to decrease the probability of misidentification. However, it has a critical flaw. In the second if-statement, it tests whether $a^{n-1} = 1 \ (mod \ n)$, now this property holds for any $a \in [1,n-1]$ if $n$ is prime. But it also holds for composite numbers known as Carmichael numbers, indeed the definition of a Carmichael number is that it has this property. This means that no matter how many times we run the algorithm, it will always incorrectly identify a given Carmichael number as prime.
 
-In order to overcome this fatal flaw, we look to one of the canonical primality testing algorithms in the literature, the one proposed by Rabin and Miller.
+\subsection*{Improving the algorithm}
+
+In order to overcome this fatal flaw, we look to another primality testing algorithm, namely the Rabin primality testing algorithm. In \cite{RABIN} Rabin describes the algorithm as follows:
+
+Given a number $n$, we pick $k$ random numbers s.t. $1 \le b_1,\ldots,b_k < n$. Let $n - 1 = 2^lm$, where $m$ is odd, for each $b_i$ compute the residues of $b^m, b^{2m}, \ldots, b^{2^lm}$ modulo $n$. (Remember that $b^{2^lm} = b^{n-1}$). For each residue, compute the greatest common divisor of the residue and $n$. If $gcd(b^{n-1},n) \neq 1$, the number is composite, this is the same step as in our naive algorithm above. If for any of the other residues, the $gcd$ is anything other that $1$ or $n$, the number is also composite. If this property holds, the algorithm outputs prime. (There is still a possibility that none of the $b_i$ contained a witness for $n$s compositeness). 
+
+Rabin's algorithm has the nice property that it has a high probability of identifying composite numbers, including Carmichael numbers. So our extended algorithm would look as follows:
+
+
+\begin{algorithmic}
+  \Function{isPrime}{$n \in \mathcal{N}$}
+    \State Choose $a \in [1,n-1]$ uniformally at random
+    \If{$gcd(a,n) > 1$}
+      \State output ''composite''
+    \Else
+      \If{$a^{n-1} = 1 \ (mod \ n)$}
+        \State Let $n-1 = 2^lm$
+        \For{ $i \in \{ m, \ 2m, \ \ldots, 2(l-1)\}$}
+          \If{$gcd(a^{i},n) \neq (1 $ or $ n)$}
+            \State output ''composite''
+          \EndIf
+        \EndFor
+        \State output ''prime''
+      \Else
+        \State output ''composite''
+      \EndIf
+    \EndIf
+  \EndFunction
+\end{algorithmic}
+
+
+
+\newpage
+\section*{Cryptographic applications}
+
+The ability to efficiently find large prime numbers has many practical applications. In particular it is necessary for some encryption algorithms. Perhaps most famously in the RSA algorithm, which is one of the first and most famous public-key encryption schemes described in the literature, that has had widespread applications.
+
+\subsection*{RSA}
+
+In the RSA algorithm \cite{RIVEST} you first need to choose two distinct prime numbers $p$ and $q$. After that you compute their product $pq = n$. This product is used as modulus for keys, the bit size of $n$ is what is called the key length.
+
+The private key has two parts, the first is $\phi(n)$, where $\phi(n)$ is Euler's totient function, because $n = pq$, this is equal to $(p-1)(q-1)$. 
+
+The public key is $e$, an integer larger than $1$, less than $\phi(n)$, coprime with $\phi(n)$, as well as the modulo $n$.
+
+The second part of the private key is the multiplicative inverse $d = e^{-1}$.
+
+When encrypting, the sender takes their message, encoded as an integer $m < n$ that is coprime with $n$, and computes the cipher-text $c = m^e$ $(mod\ n)$. Recall that $e$ and $n$ are both public. (If the message is too large it may be split into several blocks).
+
+When decrypting, the owner of the private key simply reverses the encryption as follows $c^d = (m^e)^d = m$.
+
+\subsection*{Key lengths and primality testing}
+
+The main reason we need sophisticated primality testing algorithms is that the security of RSA is predicated on the fact that factorisation is hard, which seems to be the case, at least on non-quantum architectures. Even so, the factors involved need to be sufficiently large that even very resourceful organisations are unable to compute them. (It is important to note that inverting RSA as not been proven to be as difficult as integer factorisation, and many possible attacks exists that significantly reduces the burden on the attacker).
+
+What this means in practice changes over time as the cost of hardware decreases and new factorisation algorithms are developed. But currently the general agreement is that a key length of $2048$ bits is secure \cite{RSA}. (Given that certain additional steps are taken to strengthen the scheme, including padding).
+
+The costs of finding such large primes with naive algorithms would make RSA infeasible in practice. But thanks to algorithms like Rabin's presented above (and perhaps more importantly Rabin-Miller's) we have been able to implement these powerful ideas in practice, giving us the ability to do a lot of things online in a secure manner. However, there are some other technical challenges that are also related to the practical aspects of implementing RSA. I will tackle one of these in the following section.
+
+\subsection*{Randomization and encryption}
+
+When dealing with cryptography, randomization is very important. Deterministic processes will always follow patterns, and given enough data, these can be exploited. For RSA it has been shown by Lenstra et al \cite{LENSTRA} that a not insignificant number of keys are not generated with a sufficient amount of randomness. They looked at a large dataset of public keys, and found that where a large number of keys shared the a factor in the modulo, they could be broken quite easily. For example, if two modulo $n=pq$ and $n^{\prime} = p^{\prime}q^{\prime}$ and $p=p^{\prime}$, it is sufficient to calculate $gcd(p,p^{\prime})$, which is significantly easier. This is only one example, but there are many other places in which randomisation becomes important when dealing with cryptography. This would however rapidly take us away from the topic of the course at hand.
+
+\bibliographystyle{ieeetr}
+\bibliography{bibl}
 
 \end{document}
