@@ -1,0 +1,116 @@
+\documentclass[12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title{Assignment 5}
+\author{Lasse Berglund : 48-159707}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{1. Nash Equilibrium}
+\subsection*{LP Formulation}
+	To formulate the problem as a linear program in SCIPs notation, we need to subtract all variables from the right hand side. This gives us the following problem.
+
+	\begin{verbatim}
+maximize 
+	p1 - p2
+subject to
+	p1-p2 -7x2+3x3 <= 0
+	p1-p2 +7x1-6x3 <= 0
+	p1-p2 -3x1+6x2 <= 0
+
+	x1 + x2 + x3 = 1
+
+	\end{verbatim}
+
+\subsection*{SCIP solution}
+	When running this program with SCIP we get the solution:
+
+	Objective value: $0$\\
+	$x_1 = 0.375$, $x_2 = 0.1875$, $x_3 = 0.4375$.
+
+\section*{2. Hessian}
+\subsection*{(i) $f(x,y)= x^3 + 8y^3 -12xy +1$}
+For the function $f(x,y)= x^3 + 8y^3 -12xy +1$ we have the stationary points $(0,0)$ and $(2,1)$. The Hessian matrix of the function looks like:
+$
+\begin{bmatrix}
+	6x & -12 \\
+	-12 & 48y
+\end{bmatrix}
+$
+
+The second point $(2,1)$ is the only local optimal point, as the eigenvalues of the Hessian $(x,y)$ are not positive at $(0,0)$.
+
+
+\subsection*{(ii) $f(x,y) = x^4 -x^2 + 8y^2 +4x^2y $}
+For this function we have three stationary points $(-1,-\frac{1}{4}), (0,0), (1,-\frac{1}{4})$.
+
+The Hessian for the function is:
+$
+\begin{bmatrix}
+	12x^2+8y-2 & 8x \\
+	8x & 16
+\end{bmatrix}
+$
+
+The eigenvalues for the Hessian are positive for the points $(-1,-\frac{1}{4}), (1,-\frac{1}{4})$.
+
+
+
+\section*{3. Graphic non-linear optimization}
+
+\subsection*{(a) Plot}
+	Using WolframAlpha to plot the constraints $-x^2+y\le0$ and $x^2+y^2-2\le0$ and $-y\le0$ I obtained the following plot: \\
+	\includegraphics[scale=0.5]{constraints_3}
+
+	From this we can see that the points that satisfy the constraints that minimize the objective function $-y$ are $(1,-1)$ and $(1,1)$.
+
+\subsection*{(b) KKT condition}
+
+	The KKT condition states that all the constraints are satisfied, as well as the following: \\
+		$$\nabla f(\textbf{x}^*) + \sum_{i=1}^{m} \lambda_i \nabla g_i(\textbf{x}^*) = 0 $$
+		$$ \lambda_i \ge 0 $$
+		$$ \lambda_i g_i(\textbf{x}^*) = 0 $$
+		$$i = 1,\ldots,m$$
+
+
+		For the conditions to hold $\lambda_3 = 0$ must be the case. (As $\lambda_3(0,-1)^T = 0$ is a condition). 
+
+		For $(1,-1)$ we have:
+		$$ \lambda_1 (1-1) = 0  $$
+		$$ \lambda_2 (1+1-2) = 0$$
+		$$ (0,1)^T + \lambda_1(-2,1)^T + \lambda_2 (2,-2)^T = (0,0)^T$$
+		This means we can pick $\lambda_1=1$ and $\lambda_2=1$ which means the conditions are all satisfied.
+
+		For $(1,1)$ we have:
+		$$ \lambda_1 (1+1) = 0 \implies \lambda_1 = 0  $$
+		$$ \lambda_2 (1+1-2) = 0$$
+		$$ (0,-1)^T + \lambda_2 (2,2)^T = (0,0)^T$$
+		For this we can simply pick $\lambda_2 = \frac{1}{2}$ which ensures that all conditions hold.
+
+		As expected the KKT condition holds for both points.
+		
+\section*{4. Non-linear optimization}
+
+	\subsection*{(a) KKT Condition}
+		The KKT condition for the problem looks as follows
+		$$ (0,0,1)^T + \lambda_1(1,1,0)^T + \lambda_2(2x_1,0,0)^T + \lambda_3(2x_1-2,2x_2,-1) = 0 $$
+		$$\lambda_1 (x_1 + x_2) = 0 $$
+		$$\lambda_2 (x_1^2 - 4) = 0 $$
+		$$\lambda_3 (x_1^2 +2x_1 + x_2^2 - x_3 + 1) = 0 $$
+		$$\lambda_{1,2,3} \ge 0 $$
+
+
+	\subsection*{(b) Local Optimal Solution $\textbf{x}^*$}
+		From the KKT condition above we see that $\lambda_3=1$ must be the case to make the third element equal $0$ in the first condition.
+
+		To simplify things we choose $\lambda_1=0, \lambda_2=0$, which with some calculation gives us the following locally optimal solution: 
+
+		$x_1=1,x_2=0,x_3=4$.
+
+\end{document}
