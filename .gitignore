@@ -3,6 +3,11 @@
 *.aux
 *.png
 *.txt
+*.sty
+*.bbl
+*.blg
+*.dvi
+*.out
 dec/essay*
 avalg/prime/pri
 evil_hangman/evil
