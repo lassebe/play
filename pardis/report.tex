@@ -1,0 +1,71 @@
+\documentclass[12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+
+
+
+\title{Parallel and Distributed Computing}
+\author{Lasse Berglund : 48-159707}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Toy Program}
+
+For my Toy Program I decided to use the Sieve of Eratosthenes, because it affords some easy parallelism. The algorithm is a very old Greek algorithm for finding all primes up to some given number $n$.
+
+In pseudo-code it would look something like this:
+
+\begin{algorithmic}
+  \Function{Sieve}{$n \in \mathbb{N}$}
+  	\State Let $marked$ be a list indexed $2,3,\ldots,n-1$ s.t.
+  	\State $marked[i] = 1$ if the algorithm has marked it as prime.
+  	\State Initially all entries are $0$. 
+    \For{$i\in [2,3,\ldots,n-1]$}
+    	\If{$marked[i] = 0$}
+    		\State Mark all multiples of $i$ as non-prime
+    	\EndIf
+    \EndFor
+    \For{$i \in marked$}
+    	\If{$marked[i] \neq 1$}
+    		\State Print $i$ as prime
+    	\EndIf
+    \EndFor
+  \EndFunction
+\end{algorithmic}
+
+That is, the algorithm goes through all unmarked numbers starting with $2$, and marks all multiples of that number, then continues to the next unmarked number and repeats until it reaches the end of the list. The unmarked numbers are the primes smaller than $N$.
+
+\section*{Parallel Speed-up}
+
+When parallelising the algorithm, we look at the most computationally expensive part of the function, namely the marking of all numbers that are multiples of $i$. The modulo calculations can be done independently, and the marking is fine as long as each processor works on a different part of the list (to avoid things like data-races).
+
+As such we split the list into two, the first containing the numbers smaller than and equal to $\sqrt N$, these must be computed separately by each processor. The second list contains the remaining $N-\sqrt N$ numbers. Each processor then assigned an equal-sized chunk of the second list. The final processor takes care of the possible remainder.
+
+We can also use OpenMP to parallelize some of the initialisation.
+
+When looking at the results for different sizes of $N$, we see that initially the serial version performs better, but the parallel version performs much better for larger values of $N$.
+
+\includegraphics[scale=0.4]{chart_1}
+
+
+\includegraphics[scale=0.4]{chart_2}
+
+\newpage
+\section*{Appendix}
+
+\lstset{
+	tabsize=2
+}
+\lstinputlisting{toy.cpp}
+
+
+
+\end{document}
