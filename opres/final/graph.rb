@@ -2,110 +2,103 @@
 # and also write these out in a format that is suitable for 
 # different integer programming problems in the SCIP-solver
 
-class Edge
-  attr_accessor :from, :to, :cost
-
-  def initialize(from, to, cost)
-    @from = from
-    @to = to
-    @cost = cost
-  end
-end
-
-# probably a very non-Ruby class name
-class UndirectedWeightedGraph 
-  attr_accessor :n, :edges, :cost
+class CompleteBipartiteGraph
+  attr_accessor :n, :edges, :facility
 
   def initialize(n)
+    prng = Random.new
     @n = n
-    @cost = Array.new(n)
-    @edges = Hash.new
-    (0...n).each do |v|
-      @edges[v] = {}
+    @edges = []
+    @facility = []
+    (0...n/2).each do |u|
+      @facility << prng.rand(1..100) 
+      @edges << Array.new(n/2)
     end
   end
-  
-  # returns true if there's an edge between u and v
-  def has_edge(u, v)
-    return true if @edges[u].has_key? v
 
-    false
-  end
+  def add_edge(u,v,c)
+    return if u >= n/2 or v < n/2
 
-  # adds a bidirectional edge between u and v with cost c
-  def add_edge(u, v, c)
-    return if u >= n or v >= n
-
-    return if has_edge(u,v)
-
-    @edges[u].merge!({v => c})
-    @edges[v].merge!({u => c})
-  end
-
-  def update_edge(u, v, new_cost)
-    return if u >= n or v >= n or new_cost < 0
-    return if not has_edge(u,v)
-
+    @edges[u][v % (n/2)] = c
   end
 
   def num_edges
-    edges.values.each.map(&:size).reduce(:+)/2
+    n*(n/2)
   end
-
-  def each_edge
-    arr = []
-    edges.each do |u,neighbours|
-      neighbours.each do |v,cost|
-        next if u > v
-        arr << Edge.new(u,v,cost)
-      end
-    end
-    arr
-  end
-
-  def print_vertex_cover_ip
-    puts "minimize"
-
-    objective = ""
-    # sum of all used vertex costs
-    @cost.each_with_index do |cost_v,v|
-      objective += "#{cost_v}x#{v}"
-    end
-
-    puts "subject to"
-
-    # cover all edges
-    (0...n).each do |u|
-        puts "x#{u} + x#{} >= 1"
-    end
-
-    puts "binary"
-    variables = ""
-    (0...n).each do |v|
-      print "x#{v} "
-    end
-    puts
-  end
-end
-
-# todo: generate graph with random weights
-def generate_graph_random_weights(n)
 
 end
 
 
-g = UndirectedWeightedGraph.new(4)
-input = STDIN.readlines.map(&:strip)
-input.each_with_index do |line,i|
-  j = i + 1
-  line.split(" ").map(&:to_i).each do |c|
-    g.add_edge(i,j,c)
-    j += 1
+def print_lp_form(g)
+  puts "minimize"
+
+  objective = " "
+
+  (0...g.n/2).each do |u| 
+    (g.n/2...g.n).each do |v|
+      objective <<" #{g.edges[u][v% (g.n/2)]}x_#{u}_#{v} +"
+    end
   end
+  g.facility.each_with_index do |f,i|
+    objective << " #{f}y_#{i} +"
+  end
+  puts objective[0..-2]
+
+  puts "subject to"
+
+  (0...g.n/2).each do |u| 
+    constraint = ""
+    (g.n/2...g.n).each do |v|
+      constraint << "x_#{u}_#{v} +"
+    end
+    puts constraint[0..-2] + " >= 1"
+  end
+
+
+  (0...g.n/2).each do |u| 
+    (g.n/2...g.n).each do |v|
+      puts "y_#{u} - x_#{u}_#{v} >= 0"
+    end
+  end
+
+  puts "binary"
+
+  (0...g.n/2).each do |u| 
+    (g.n/2...g.n).each do |v|
+      puts "x_#{u}_#{v}"
+    end
+  end
+  (0...g.n/2).each do |u| 
+    puts "y_#{u}"
+  end
+
+
 end
 
-p g.num_edges
-g.each_edge.each do |e|
-  puts "(#{e.from},#{e.to}) cost #{e.cost}"
+def generate_complete_bipartite_graph(n)
+  if not n%2==0
+    puts "bipartite graph needs an even number of nodes"
+    return nil
+  end
+
+
+  generator = Random.new
+  g = CompleteBipartiteGraph.new(n)
+
+  (0...n/2).each do |u|
+    (n/2...n).each do |v|
+      cost = generator.rand(1..100)
+      g.add_edge(u,v,cost)
+    end
+  end
+  g
 end
-#g.print_vertex_cover_ip
+
+
+
+n = 10
+g = generate_complete_bipartite_graph(n)
+
+
+print_lp_form(g)
+

@@ -1,6 +1,7 @@
 \documentclass[12pt]{report}
 
 \usepackage[utf8]{inputenc}
+\usepackage{amssymb}
 \usepackage{parskip}
 \usepackage{graphicx}
 
@@ -11,14 +12,200 @@
 \begin{document}
 \maketitle
 
-I've chosen to look at a set of NP-Complete Graph Problems.
+\section*{The Problem}
 
-\begin{itemize}
-\item Vertex Cover
-\end{itemize}
+	I've decided to do my final report on the facility location problem.
+
+	In this problem, we have a corporation that is opening a number of new facilities. The corporation has a set of possible locations for the new facilities. The corporation also has a set of customers, and information about how far away each customer is from each potential location. The company knows that the customers will go to the store that is closest to them. They want to open as few locations as possible, as each new facility comes at a cost. 
+
+	Mathematically this can be seen as a complete bipartite graph  
+		$$G = ((F\cup C),E)$$
+	Where the vertices in the $F$ are the possible locations, the vertices on the $C$ are the customers, and the costs over the edges are the distances between the customer and location. These costs are described by the function
+		$$ w((u,v)) = n\in \mathbb{N}, (u,v)\in E, u\in F, v\in C $$
+	We also need a function to model the cost of opening a facility
+		$$ f(u) = n\in \mathbb{N}, u\in F$$
+
+\subsection*{Mixed Integer Programming Formalisation}
+
+	We model the cost functions $w$ and $f$ the same as above. 
+
+	We need indicator-variables for each location $y_i \in \{0,1\}$ that are $1$ if the corporation opens a facility there, and $0$ otherwise.
+
+	We also need indicator-variables for each customer $x_{ij} \in \{0,1\}$, that are $1$ if the customer $i$ goes to facility $j$. Of course, that facility needs to actually be open, which will be reflected in a constraint.
+
+	The objective function needs to capture two aspects, the customers using the closest facility and the cost of opening facilities. This can be described by the following function:
+	$$ \sum_{i\in F}\sum_{j\in C} w((i,j))x_{ij} + \sum_{i\in F}f_i y_i$$
+
+	We model the constraints as follows
+
+		Each customer has at least one facility they go to
+		$$ \sum_{i\in F} x_{ij} \ge 1, j\in C$$
+		
+		Customers can only go to open facilities
+		$$ y_i - x_{ij} \ge 0, i\in F, j\in C$$
+		$$ x_{ij} \in \{0,1\} $$
+		$$ y_{ij} \in \{0,1\} $$
 
 
-\section*{Integer Programming Formulation}
+\section*{Solving specfic instances}
+	I wrote a Ruby-program to generate complete bipartite graphs with random edge weights between $1$ and $100$. In a similar fashion, the cost of constructing a facility was chosen randomly for each location between $1-100$. The program also wrote a linear program representation of the graph that would work in SCIP.
+
+	After that I ran SCIP with the generated input. 
+
+	The Ruby program, and an example are available in the appendix.
+
+\section*{Results}
+	SCIP was able to quickly solve instances with $10$, $100$, $1000$, and even $10000$ nodes. This leads me to believe that there is something wrong in my model, though it follows the literature as far as I can tell. For some reason SCIP always sets $y_i = 1, \forall i$. Even when examples are deliberately altered to make this unreasonable.
+
+	Unfortunately I am unable to fix this in time due to other commitments. I understand that this will reflect negatively on my final project but I hope that I can still get credit for attendance and the assignments.
+ 
+\section*{Improvements}
+
+	One constraint that we do not have, which makes the formulation a little bit less realistic, is the triangle inequality between edge weights, saying that $w((i,j)) <= w((i^\prime,j)) + w((i^\prime,j^\prime)) + w((i,j^\prime))$. In the real world this obviously holds for reasons of geometry. My reason for excluding this was to make the graph generation significantly easier.
+
+	But I find the model pretty appealing, while there might of course be additional factors that come into play for customers than just distance, it's a nice abstraction that can be used to represent a more complex relationship.
 
 
+\newpage
+\section*{Appendix}
+\subsection{Graph generation}
+\begin{verbatim}
+class CompleteBipartiteGraph
+  attr_accessor :n, :edges, :facility
+
+  def initialize(n)
+    prng = Random.new
+    @n = n
+    @edges = []
+    @facility = []
+    (0...n/2).each do |u|
+      @facility << prng.rand(1..100) 
+      @edges << Array.new(n/2)
+    end
+  end
+
+  def add_edge(u,v,c)
+    return if u >= n/2 or v < n/2
+
+    @edges[u][v % (n/2)] = c
+  end
+
+  def num_edges
+    n*(n/2)
+  end
+
+end
+
+
+
+def print_lp_form(g)
+  puts "minimize"
+
+  objective = " "
+
+  (0...g.n/2).each do |u| 
+    (g.n/2...g.n).each do |v|
+      objective <<" #{g.edges[u][v% (g.n/2)]}x_#{u}_#{v} +"
+    end
+  end
+  g.facility.each_with_index do |f,i|
+    objective << " #{f}y_#{i} +"
+  end
+  puts objective[0..-2]
+
+  puts "subject to"
+
+  (0...g.n/2).each do |u| 
+    constraint = ""
+    (g.n/2...g.n).each do |v|
+      constraint << "x_#{u}_#{v} +"
+    end
+    puts constraint[0..-2] + " >= 1"
+  end
+
+
+  (0...g.n/2).each do |u| 
+    (g.n/2...g.n).each do |v|
+      puts "y_#{u} - x_#{u}_#{v} >= 0"
+    end
+  end
+
+  puts "binary"
+
+  (0...g.n/2).each do |u| 
+    (g.n/2...g.n).each do |v|
+      puts "x_#{u}_#{v}"
+    end
+  end
+  (0...g.n/2).each do |u| 
+    puts "y_#{u}"
+  end
+
+
+end
+
+def generate_complete_bipartite_graph(n)
+  if not n%2==0
+    puts "bipartite graph needs an even number of nodes"
+    return nil
+  end
+
+
+  generator = Random.new
+  g = CompleteBipartiteGraph.new(n)
+
+  (0...n/2).each do |u|
+    (n/2...n).each do |v|
+      cost = generator.rand(1..100)
+      g.add_edge(u,v,cost)
+    end
+  end
+  g
+end
+
+
+
+n = 10
+g = generate_complete_bipartite_graph(n)
+
+
+print_lp_form(g)
+\end{verbatim}
+
+\subsection*{Example SCIP instance}
+minimize
+  $88x_{05} + 7x_{06} + 14x_{07} + 58x_{08} + 36x_{09} + 97x_{15} + 43x_{16} + 35x_{17} + 84x_{18} + 73x_{19} + 83x_{25} + 5x_{26} + 13x_{27} + 13x_{28} + 11x_{29} + 21x_{35} + 77x_{36} + 64x_{37} + 12x_{38} + 50x_{39} + 28x_{45} + 49x_{46} + 9x_{47} + 34x_{48} + 18x_{49} + 46y_0 + 15y_1 + 44y_2 + 46y_3 + 56y_4 $\\
+subject to\\
+$x_{05} +x_{06} +x_{07} +x_{08} +x_{09}  >= 1$\\
+$x_{15} +x_{16} +x_{17} +x_{18} +x_{19}  >= 1$\\
+$x_{25} +x_{26} +x_{27} +x_{28} +x_{29}  >= 1$\\
+$x_{35} +x_{36} +x_{37} +x_{38} +x_{39}  >= 1$\\
+$x_{45} +x_{46} +x_{47} +x_{48} +x_{49}  >= 1$\\
+$y_0 - x_{05} >= 0$\\
+$y_0 - x_{06} >= 0$\\
+$y_0 - x_{07} >= 0$\\
+$y_0 - x_{08} >= 0$\\
+$y_0 - x_{09} >= 0$\\
+$y_1 - x_{15} >= 0$\\
+$y_1 - x_{16} >= 0$\\
+$y_1 - x_{17} >= 0$\\
+$y_1 - x_{18} >= 0$\\
+$y_1 - x_{19} >= 0$\\
+$y_2 - x_{25} >= 0$\\
+$y_2 - x_{26} >= 0$\\
+$y_2 - x_{27} >= 0$\\
+$y_2 - x_{28} >= 0$\\
+$y_2 - x_{29} >= 0$\\
+$y_3 - x_{35} >= 0$\\
+$y_3 - x_{36} >= 0$\\
+$y_3 - x_{37} >= 0$\\
+$y_3 - x_{38} >= 0$\\
+$y_3 - x_{39} >= 0$\\
+$y_4 - x_{45} >= 0$\\
+$y_4 - x_{46} >= 0$\\
+$y_4 - x_{47} >= 0$\\
+$y_4 - x_{48} >= 0$\\
+$y_4 - x_{49} >= 0$\\
+binary
+$x_{05}$, $x_{06}$, $x_{07}$, $x_{08}$, $x_{09}$, $x_{15}$, $x_{16}$, $x_{17}$, $x_{18}$, $x_{19}$, $x_{25}$, $x_{26}$, $x_{27}$, $x_{28}$, $x_{29}$, $x_{35}$, $x_{36}$, $x_{37}$, $x_{38}$, $x_{39}$, $x_{45}$, $x_{46}$, $x_{47}$, $x_{48}$, $x_{49}$, $y_0$, $y_1$, $y_2$, $y_3$, $y_4$, 
 \end{document}
